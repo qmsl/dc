@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login...</title>
+</head>
+<body onload="onload()">
+</body>
+<script type="text/javascript">
+    function onload() {
+        var uid = getCookie("uid");
+        if (null == uid || undefined == uid) {
+            window.location.href = "/auth/wx/auth"
+        } else {
+            var state = getCookie("state")
+            if (null != state && undefined != state) {
+                if (state == 1) {
+                    window.location.href = "index2.html"
+                } else {
+                    window.location.href = "index1.html"
+                }
+            }
+        }
+    }
+    //获取cookie
+    function getCookie(name) {
+        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg)) {
+            return unescape(arr[2]);
+        } else {
+            return null;
+        }
+    }
+</script>
+</html>
