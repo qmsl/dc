@@ -9,11 +9,13 @@ import com.ty.dc.service.IComboService;
 import com.ty.dc.service.IOrderService;
 import com.ty.dc.utils.AjaxResult;
 import com.ty.dc.utils.DateUtils;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -24,6 +26,7 @@ import java.util.List;
  * @author wen
  * @since 2020-09-21
  */
+@Log
 @RestController
 @RequestMapping("/dc/order")
 public class OrderController extends BaseController {
@@ -73,14 +76,23 @@ public class OrderController extends BaseController {
     @RequestMapping("mod")
     public AjaxResult mod(Long orderId, Long comboId) {
 
-        Combo combo = comboService.getById(comboId);
-        if (null == combo) {
-            return AjaxResult.error("套餐不存在");
+        LocalTime endTime = LocalTime.of(16,0);
+        if(endTime.isAfter(LocalTime.now())){
+            return AjaxResult.error("修改订单失败，截止时间16:00！");
         }
 
         Order order = orderService.getById(orderId);
-        if (null == order || !order.getStatus().equals("1")) {
-            return AjaxResult.error("订单不正确");
+        if (null == order) {
+            return AjaxResult.error("订单不正确！");
+        }
+
+        if (order.getStatus().equals("0") || order.getStatus().equals("2")) {
+            return AjaxResult.error("订单已确定，不允许修改！");
+        }
+
+        Combo combo = comboService.getById(comboId);
+        if (null == combo) {
+            return AjaxResult.error("套餐不存在！");
         }
 
         order.setComboName(combo.getComboName());
@@ -88,7 +100,7 @@ public class OrderController extends BaseController {
         order.setComboType(combo.getComboType());
         order.setComboId(comboId);
         order.setComboImg(combo.getComboImg());
-        order.setOrderNum(combo.getComboCode() + "-" + DateUtils.dateTimeNow());
+        //order.setOrderNum(combo.getComboCode() + "-" + DateUtils.dateTimeNow());
 
         boolean isOk = orderService.updateById(order);
         return AjaxResult.success(isOk);
@@ -97,11 +109,26 @@ public class OrderController extends BaseController {
     //增加订单
     @RequestMapping("add")
     public AjaxResult add(Long comboId) {
+
+        LocalTime endTime = LocalTime.of(14,0);
+        if(endTime.isAfter(LocalTime.now())){
+            return AjaxResult.error("下单失败，截止时间14:00！");
+        }
+
         String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
+
+        int orderCount = orderService.count(new QueryWrapper<Order>()
+                .eq("order_date", LocalDate.now().plusDays(0L))
+                .eq("user_id", uid)
+        );
+
+        if(orderCount > 0){
+            return AjaxResult.error("下单失败，每天只可以下单一次！");
+        }
 
         Combo combo = comboService.getById(comboId);
         if (null == combo) {
-            return AjaxResult.error("套餐不存在");
+            return AjaxResult.error("套餐不存在!");
         }
 
         Order order = new Order();
@@ -113,7 +140,7 @@ public class OrderController extends BaseController {
         order.setComboType(combo.getComboType());
         order.setComboId(comboId);
         order.setComboImg(combo.getComboImg());
-        order.setOrderNum(combo.getComboCode() + "-" + DateUtils.dateTimeNow());
+        //order.setOrderNum(combo.getComboCode() + "-" + DateUtils.dateTimeNow());
         order.setOrderDate(LocalDate.now());
 
         boolean isOk = orderService.save(order);

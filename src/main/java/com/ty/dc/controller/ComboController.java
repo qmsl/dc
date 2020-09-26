@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -61,6 +60,24 @@ public class ComboController extends BaseController {
         }
         boolean idOk2 = comboGoodsService.saveBatch(tmpList);
         return AjaxResult.success(idOk1 && idOk2);
+    }
+
+    @RequestMapping("upStatus")
+    public AjaxResult upstatus(Long comboId, String status) {
+        Combo combo = comboService.getById(comboId);
+        if (null == combo) {
+            return AjaxResult.error("套餐不存在！");
+        }
+        combo.setStatus(status);
+        boolean idOk = comboService.updateById(combo);
+
+        if (idOk && combo.getStatus().equals("1")) {
+            return AjaxResult.success("套餐启用成功！");
+        } else if (idOk && combo.getStatus().equals("2")) {
+            return AjaxResult.success("套餐禁用成功！");
+        } else {
+            return AjaxResult.error();
+        }
     }
 
     @RequestMapping("mod")

@@ -6,6 +6,8 @@ import com.ty.dc.service.IOrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -17,4 +19,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements IOrderService {
 
+    @Override
+    public List<Order> getOrderMinX(int minOrder) {
+        return baseMapper.getOrderMinX(minOrder);
+    }
 }

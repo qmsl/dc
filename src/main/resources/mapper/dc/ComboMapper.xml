@@ -38,6 +38,7 @@
           AND cg.goods_id = g.id
           AND c.del_flag = 0
           AND g.del_flag = 0
+          AND c.status = 1
     </select>
 
     <select id="getComboCount" resultType="java.util.HashMap">

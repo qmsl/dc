@@ -16,15 +16,24 @@ public class Global {
      */
     private static String profile;
 
-    private static String redirectDomain;
+    private static String redirecturl;
 
     public static String getProfile() {
         return profile;
     }
 
+    public static String getRedirecturl() {
+        return redirecturl;
+    }
+
+    public void setRedirecturl(String redirecturl) {
+        Global.redirecturl = redirecturl;
+    }
+
     public void setProfile(String profile) {
         Global.profile = profile;
     }
+
 
     /**
      * 获取下载路径
@@ -39,12 +48,5 @@ public class Global {
     public static String getUploadPath() {
         return getProfile() + "/upload";
     }
-
-    public static String getRedirectDomain() {
-        return redirectDomain;
-    }
-
-    public static void setRedirectDomain(String redirectDomain) {
-        Global.redirectDomain = redirectDomain;
-    }
 }
+

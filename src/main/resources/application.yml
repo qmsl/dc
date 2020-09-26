@@ -1,6 +1,6 @@
 dc:
-  profile: /data
-  redirectDomain: https://cgwework.sz.gov.cn
+  profile: d:\data
+  redirecturl: https://cgwework.sz.gov.cn
 server:
   port: 8080
   servlet:

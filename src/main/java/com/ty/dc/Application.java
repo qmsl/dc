@@ -5,12 +5,14 @@ import me.chanjar.weixin.cp.api.WxCpService;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * 启动程序
  *
  * @author ruoyi
  */
+@EnableScheduling
 @SpringBootApplication
 public class Application {
     public static void main(String[] args) {

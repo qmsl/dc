@@ -43,7 +43,7 @@ public class AuthController extends BaseController {
     public String auth(@CookieValue String state) {
 
         WxCpService wxCpService = WxCpConfiguration.getCpService(1000033);
-        String url = wxCpService.getOauth2Service().buildAuthorizationUrl(Global.getRedirectDomain() + redirect_url, state);
+        String url = wxCpService.getOauth2Service().buildAuthorizationUrl(Global.getRedirecturl() + redirect_url, state);
         return "redirect:" + url;
     }
 
