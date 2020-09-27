@@ -40,7 +40,7 @@ public class CheckOrderScheduling {
     }
 
     //定时器有间隔，最后几分钟的修改就更新不到，所以最后在确定下
-    @Scheduled(cron = "10 0 17 * * ?")
+    @Scheduled(cron = "1 0 17 * * ?")
     void finalCheckOrder() {
         preCheckOrder();//最后执行一次，这次还没有达到额定份数的订单就给取消掉
         List<Order> orders = orderService.list(new QueryWrapper<Order>()
