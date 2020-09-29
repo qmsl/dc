@@ -21,7 +21,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     public static final String USER_KEY = "uid";
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         AuthIgnore annotation;
         if (handler instanceof HandlerMethod) {
             annotation = ((HandlerMethod) handler).getMethodAnnotation(AuthIgnore.class);
@@ -43,8 +43,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         //如果上面都不存在，就从cookie里面取
         if (StringUtils.isBlank(token)) {
             Cookie[] cookies = request.getCookies();
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("uid")){
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("uid")) {
                     token = cookie.getValue();
                 }
             }

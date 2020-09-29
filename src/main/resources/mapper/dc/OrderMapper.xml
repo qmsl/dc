@@ -6,9 +6,12 @@
         SELECT * FROM dc_order
         WHERE del_flag = 0 AND order_date = CURDATE()
         AND combo_id IN (
-            SELECT t.combo_id FROM
-                ( SELECT combo_id, COUNT(id) AS cnt FROM dc_order o WHERE o.del_flag = 0 AND o.order_date = CURDATE() AND o.state != 2 GROUP BY combo_id ) t
-            WHERE t.cnt &lt; #{minOrder}
+            SELECT combo_id FROM dc_order o
+            WHERE o.del_flag = 0
+            AND o.order_date = CURDATE()
+            AND o.status != 2
+            GROUP BY combo_id
+            HAVING COUNT(id) &lt; #{minOrder}
         )
     </select>
 </mapper>

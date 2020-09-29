@@ -3,8 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Login...</title>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+    <link rel=icon href=/favicon.ico>
+    <title>vue-fs-app</title>
+    <link href=/css/app.d02e5144.css rel=preload as=style>
+    <link href=/css/chunk-vendors.287a4fba.css rel=preload as=style>
+    <link href=/js/app.0717dbf8.js rel=preload as=script>
+    <link href=/js/chunk-vendors.3405f893.js rel=preload as=script>
+    <link href=/css/chunk-vendors.287a4fba.css rel=stylesheet>
+    <link href=/css/app.d02e5144.css rel=stylesheet>
 </head>
 <body onload="onload()">
+<noscript>
+    <strong>We're sorry but vue-fs-app doesn't work properly without JavaScript enabled. Please enable it to
+    continue.</strong>
+</noscript>
+<div id=app></div>
+<script src=/js/chunk-vendors.3405f893.js></script>
+<script src=/js/app.0717dbf8.js></script>
 </body>
 <script type="text/javascript">
     function onload() {
@@ -15,9 +32,9 @@
             var state = getCookie("state")
             if (null != state && undefined != state) {
                 if (state == 1) {
-                    window.location.href = "index2.html"
+                    window.location.href = "/#/auth?sid="+uid+"&acton=list"
                 } else {
-                    window.location.href = "index1.html"
+                    window.location.href = "/#/auth?sid="+uid+"&acton=scan"
                 }
             }
         }

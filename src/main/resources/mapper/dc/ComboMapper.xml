@@ -47,7 +47,7 @@
             count( o.combo_id ) AS cnt
         FROM
             dc_combo c LEFT JOIN dc_order o ON c.id = o.combo_id
-        WHERE o.order_date = DATE_SUB(CURDATE(),INTERVAL 1 DAY)
+        WHERE o.order_date = CURDATE()
         GROUP BY
             c.id
     </select>

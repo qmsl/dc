@@ -74,7 +74,7 @@ public class Order extends BaseEntity {
     /**
      * 评分
      */
-    private Integer eveScore;
+    private Double eveScore;
 
     /**
      * 评价内容

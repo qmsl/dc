@@ -2,7 +2,7 @@ dc:
   profile: d:\data
   redirecturl: https://cgwework.sz.gov.cn
 server:
-  port: 8080
+  port: 8081
   servlet:
     context-path: /
   tomcat:

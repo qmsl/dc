@@ -23,15 +23,17 @@ public class CheckOrderScheduling {
     @Autowired
     private IOrderService orderService;
 
-    @Scheduled(cron = "0 1/5 14-16 * * ?")
+    @Scheduled(cron = "0 * 14-16 * * ?")
     void preCheckOrder() {
 
         //首先把所有订单改状态为1(新下单)改成0(已确认)状态,此时不可以新建订单了
-        boolean isOk = orderService.update(new UpdateWrapper<Order>().set("status", "0")
+        boolean isOk = orderService.update(new UpdateWrapper<Order>()
+                .set("status", "0")
+                .setSql("order_num = CONCAT(combo_code,\"-\",100000+id)")
                 .eq("order_date", LocalDate.now()).eq("status", "1")
         );
 
-        //然后把所有订餐数量不超过 5 的订单找出来，把状态改回 1， 可以修改状态
+        //然后把所有订餐数量不超过 5 的订单找出来，把状态改回1（可以修改状态）
         List<Order> orders = orderService.getOrderMinX(5);
         for (Order order : orders) {
             order.setStatus("1");

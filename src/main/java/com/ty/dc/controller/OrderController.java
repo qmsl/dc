@@ -8,14 +8,12 @@ import com.ty.dc.interceptor.AuthenticationInterceptor;
 import com.ty.dc.service.IComboService;
 import com.ty.dc.service.IOrderService;
 import com.ty.dc.utils.AjaxResult;
-import com.ty.dc.utils.DateUtils;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -50,11 +48,14 @@ public class OrderController extends BaseController {
 
     //订单评价
     @RequestMapping("eveOrder")
-    public AjaxResult eveOrder(Long orderId, Integer eveScore, String eveDesc) {
+    public AjaxResult eveOrder(Long orderId, Double eveScore, String eveDesc) {
         String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
         Order order = orderService.getById(orderId);
         if (null == order || !order.getUserId().equals(uid)) {
-            return AjaxResult.error("订单不正确");
+            return AjaxResult.error("订单不正确！");
+        }
+        if (null != order.getEveScore() || null != order.getEveDesc()) {
+            return AjaxResult.error("重复评价！");
         }
         order.setEveScore(eveScore);
         order.setEveDesc(eveDesc);
@@ -68,7 +69,7 @@ public class OrderController extends BaseController {
     public AjaxResult list() {
         String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
         startPage();
-        List<Order> list = orderService.list(new QueryWrapper<Order>().eq("user_id", uid));
+        List<Order> list = orderService.list(new QueryWrapper<Order>().eq("user_id", uid).orderByDesc("order_date"));
         return AjaxResult.success(getDataTable(list));
     }
 
@@ -122,7 +123,7 @@ public class OrderController extends BaseController {
                 .eq("user_id", uid)
         );
 
-        if(orderCount > 0){
+        if (orderCount > 0) {
             return AjaxResult.error("下单失败，每天只允许下单一次！");
         }
 
