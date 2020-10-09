@@ -40,7 +40,7 @@ public class AuthController extends BaseController {
         cookie.setPath("/");
         cookie.setMaxAge(-1);
         getResponse().addCookie(cookie);
-        return "index";
+        return "auth";
     }
 
     @RequestMapping("auth")
@@ -67,6 +67,6 @@ public class AuthController extends BaseController {
         cookieState.setMaxAge(-1);
         getResponse().addCookie(cookieState);
 
-        return "index";
+        return "auth";
     }
 }

@@ -69,7 +69,10 @@ public class OrderController extends BaseController {
     public AjaxResult list() {
         String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
         startPage();
-        List<Order> list = orderService.list(new QueryWrapper<Order>().eq("user_id", uid).orderByDesc("order_date"));
+        List<Order> list = orderService.list(new QueryWrapper<Order>()
+                .eq("user_id", uid)
+                .lt("order_date",LocalDate.now())
+                .orderByDesc("order_date"));
         return AjaxResult.success(getDataTable(list));
     }
 
@@ -87,7 +90,7 @@ public class OrderController extends BaseController {
             return AjaxResult.error("订单不正确！");
         }
 
-        if (order.getStatus().equals("0") || order.getStatus().equals("2")) {
+        if (order.getStatus().equals("0")) {
             return AjaxResult.error("订单已确定，不允许修改！");
         }
 
@@ -95,7 +98,7 @@ public class OrderController extends BaseController {
         if (null == combo) {
             return AjaxResult.error("套餐不存在！");
         }
-
+        order.setStatus("1");
         order.setComboName(combo.getComboName());
         order.setComboCode(combo.getComboCode());
         order.setComboType(combo.getComboType());
@@ -157,6 +160,19 @@ public class OrderController extends BaseController {
             return AjaxResult.error("订单不正确");
         }
         boolean isOk = orderService.removeById(id);
+        return AjaxResult.success(isOk);
+    }
+
+    //删除订单
+    @RequestMapping("cancel")
+    public AjaxResult cancel(Long id) {
+        String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
+        Order order = orderService.getById(id);
+        if (null == order || !order.getUserId().equals(uid)) {
+            return AjaxResult.error("订单不正确");
+        }
+        order.setStatus("2");
+        boolean isOk = orderService.updateById(order);
         return AjaxResult.success(isOk);
     }
 }
