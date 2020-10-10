@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -163,7 +164,7 @@ public class OrderController extends BaseController {
         return AjaxResult.success(isOk);
     }
 
-    //删除订单
+    //取消订单
     @RequestMapping("cancel")
     public AjaxResult cancel(Long id) {
         String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
@@ -175,4 +176,13 @@ public class OrderController extends BaseController {
         boolean isOk = orderService.updateById(order);
         return AjaxResult.success(isOk);
     }
+
+    //获取今日订单统计数据
+    /*@RequestMapping("getTodayOrderCnt")
+    public AjaxResult getTodayOrderCnt(Date date) {
+
+        List<Combo> combo = comboService.list(new QueryWrapper<Combo>().eq("status","1"));
+
+        return AjaxResult.success(isOk);
+    }*/
 }

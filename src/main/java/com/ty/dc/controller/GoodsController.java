@@ -1,5 +1,6 @@
 package com.ty.dc.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ty.dc.base.BaseController;
 import com.ty.dc.entity.Goods;
 import com.ty.dc.service.IGoodsService;
@@ -26,9 +27,9 @@ public class GoodsController extends BaseController {
     private IGoodsService goodsService;
 
     @RequestMapping("list")
-    public AjaxResult list() {
+    public AjaxResult list(Goods goods) {
         startPage();
-        List<Goods> list = goodsService.list();
+        List<Goods> list = goodsService.list(new QueryWrapper<>(goods));
         return AjaxResult.success(getDataTable(list));
     }
 
