@@ -6,6 +6,9 @@ import com.ty.dc.service.IComboCountService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -17,4 +20,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ComboCountServiceImpl extends ServiceImpl<ComboCountMapper, ComboCount> implements IComboCountService {
 
+    @Override
+    public List<ComboCount> listComboCount(Date startDate, Date endDate) {
+        return baseMapper.listComboCount(startDate, endDate);
+    }
 }

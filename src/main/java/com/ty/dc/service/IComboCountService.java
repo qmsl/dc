@@ -3,6 +3,9 @@ package com.ty.dc.service;
 import com.ty.dc.entity.ComboCount;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IComboCountService extends IService<ComboCount> {
 
+    List<ComboCount> listComboCount(Date startDate, Date endDate);
 }

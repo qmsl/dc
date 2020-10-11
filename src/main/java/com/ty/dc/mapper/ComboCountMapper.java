@@ -1,11 +1,14 @@
 package com.ty.dc.mapper;
 
-import com.ty.dc.entity.ComboCount;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ty.dc.entity.ComboCount;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author wen
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ComboCountMapper extends BaseMapper<ComboCount> {
 
+    List<ComboCount> listComboCount(Date startDate, Date endDate);
 }

@@ -3,6 +3,8 @@ package com.ty.dc.service;
 import com.ty.dc.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -17,4 +19,7 @@ public interface IOrderService extends IService<Order> {
 
     List<Order> getOrderMinX(int minOrder);
 
+    List<HashMap> getOrderPersonCnt(Date startDate, Date endDate);
+
+    List<HashMap> getOrderScore(Date startDate, Date endDate, String type, int num);
 }

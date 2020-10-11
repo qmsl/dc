@@ -2,4 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ty.dc.mapper.ComboCountMapper">
 
+    <select id="listComboCount" resultType="ComboCount">
+        SELECT t.combo_code,t.combo_desc,t.combo_img,t.combo_name,t.combo_type ,SUM(t.count) as count
+        FROM dc_combo_count t
+        WHERE order_date >= #{startDate} AND order_date &lt;= #{endDate}
+        GROUP BY t.combo_code,t.combo_desc,t.combo_img,t.combo_name,t.combo_type
+    </select>
 </mapper>

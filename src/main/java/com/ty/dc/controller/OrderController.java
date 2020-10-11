@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -72,7 +73,7 @@ public class OrderController extends BaseController {
         startPage();
         List<Order> list = orderService.list(new QueryWrapper<Order>()
                 .eq("user_id", uid)
-                .lt("order_date",LocalDate.now())
+                .lt("order_date", LocalDate.now())
                 .orderByDesc("order_date"));
         return AjaxResult.success(getDataTable(list));
     }
@@ -175,6 +176,20 @@ public class OrderController extends BaseController {
         order.setStatus("2");
         boolean isOk = orderService.updateById(order);
         return AjaxResult.success(isOk);
+    }
+
+    //统计各菜品的点评人数
+    @RequestMapping("getOrderPersonCnt")
+    public AjaxResult getOrderPersonCnt(Date startDate, Date endDate) {
+        List<HashMap> data = orderService.getOrderPersonCnt(startDate, endDate);
+        return AjaxResult.success(data);
+    }
+
+    //星级最高/低的N个菜品  type=1最高；=2最低；num 多少个
+    @RequestMapping("getOrderScore")
+    public AjaxResult getOrderScore(Date startDate, Date endDate, String type, int num) {
+        List<HashMap> data = orderService.getOrderScore(startDate, endDate, type, num);
+        return AjaxResult.success(data);
     }
 
 }
