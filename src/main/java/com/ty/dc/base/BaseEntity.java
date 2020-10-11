@@ -3,6 +3,7 @@ package com.ty.dc.base;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -26,12 +27,14 @@ public class BaseEntity implements Serializable {
      * 创建时间
      */
     @JsonIgnore
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime crtTime;
 
     /**
      * 更新时间
      */
     @JsonIgnore
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime upTime;
 
     public Long getId() {

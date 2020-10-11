@@ -6,6 +6,7 @@ import com.ty.dc.service.IComboService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ import java.util.Map;
 public class ComboServiceImpl extends ServiceImpl<ComboMapper, Combo> implements IComboService {
 
     @Override
-    public List getComboCount() {
+    public List<HashMap> getComboCount() {
         return baseMapper.getComboCount();
     }
 

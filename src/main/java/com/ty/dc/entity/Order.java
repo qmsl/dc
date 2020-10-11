@@ -5,6 +5,7 @@ import com.ty.dc.base.BaseEntity;
 import java.time.LocalDate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -64,6 +65,7 @@ public class Order extends BaseEntity {
     /**
      * 订单日期
      */
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate orderDate;
 
     /**

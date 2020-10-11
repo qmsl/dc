@@ -177,12 +177,4 @@ public class OrderController extends BaseController {
         return AjaxResult.success(isOk);
     }
 
-    //获取今日订单统计数据
-    /*@RequestMapping("getTodayOrderCnt")
-    public AjaxResult getTodayOrderCnt(Date date) {
-
-        List<Combo> combo = comboService.list(new QueryWrapper<Combo>().eq("status","1"));
-
-        return AjaxResult.success(isOk);
-    }*/
 }

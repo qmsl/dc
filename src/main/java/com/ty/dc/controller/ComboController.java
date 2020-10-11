@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public class ComboController extends BaseController {
 
     @RequestMapping("getComboCount")
     public AjaxResult getComboCount() {
-        List retval = comboService.getComboCount();
+        List<HashMap> retval = comboService.getComboCount();
         return AjaxResult.success(retval);
     }
 

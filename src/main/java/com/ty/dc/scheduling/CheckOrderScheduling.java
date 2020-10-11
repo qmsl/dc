@@ -2,14 +2,21 @@ package com.ty.dc.scheduling;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.ty.dc.entity.Combo;
+import com.ty.dc.entity.ComboCount;
 import com.ty.dc.entity.Order;
+import com.ty.dc.service.IComboCountService;
+import com.ty.dc.service.IComboService;
 import com.ty.dc.service.IOrderService;
 import lombok.extern.java.Log;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,15 +26,21 @@ import java.util.List;
 @Log
 public class CheckOrderScheduling {
 
-    //点餐截止时间为14点整，订单截止修改时间16点
     @Autowired
     private IOrderService orderService;
 
+    @Autowired
+    private IComboCountService comboCountService;
+
+    @Autowired
+    private IComboService comboService;
+
+    //点餐截止时间为14点整，订单截止修改时间16点
     @Scheduled(cron = "0 * 14-16 * * ?")
     void preCheckOrder() {
 
         //首先把所有订单改状态为1(新下单)改成0(已确认)状态,此时不可以新建订单了
-        boolean isOk = orderService.update(new UpdateWrapper<Order>()
+        orderService.update(new UpdateWrapper<Order>()
                 .set("status", "0")
                 .setSql("order_num = CONCAT(combo_code,\"-\",100000+id)")
                 .eq("order_date", LocalDate.now()).eq("status", "1")
@@ -53,5 +66,29 @@ public class CheckOrderScheduling {
             order.setStatus("2");//把状态修改为已取消状态
             orderService.updateById(order);
         }
+
+        initComboCount();//把当天的订单统计数据归档，方便查询
+    }
+
+
+    void initComboCount(){
+        List<Combo> combos = comboService.list(new QueryWrapper<Combo>().eq("status","1"));
+        List<HashMap> retval = comboService.getComboCount();
+        List<ComboCount> comboCounts = new ArrayList<>(combos.size());
+        ComboCount comboCount;
+        for(Combo combo : combos){
+            comboCount = new ComboCount();
+            BeanUtils.copyProperties(combo,comboCount);
+            comboCount.setOrderDate(LocalDate.now());
+            comboCount.setCount(0);//先设置为0，如果有数据下面就设置成实际数量
+            for(HashMap map : retval){
+                if(map.get("id").toString().equals(combo.getId().toString())){
+                    comboCount.setCount((Integer)map.get("cnt"));
+                }
+            }
+            comboCounts.add(comboCount);
+        }
+
+        comboCountService.saveBatch(comboCounts);
     }
 }

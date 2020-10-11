@@ -3,6 +3,7 @@ package com.ty.dc.service;
 import com.ty.dc.entity.Combo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ import java.util.Map;
  */
 public interface IComboService extends IService<Combo> {
 
-    List getComboCount();
+    List<HashMap> getComboCount();
 
     List<Combo> listCombo(Combo combo);
 }
