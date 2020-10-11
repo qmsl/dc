@@ -115,7 +115,6 @@ public class CheckOrderScheduling {
             WxCpService wxCpService = WxCpConfiguration.getCpService(1000033);
             wxCpService.messageSend(WxCpMessage
                     .TEXT()
-                    .agentId(1000033) // 企业号应用ID
                     .toUser(uid.substring(0, uid.length() - 1))
                     .content(msg)
                     .build());
