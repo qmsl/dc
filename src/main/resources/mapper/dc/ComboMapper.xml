@@ -26,7 +26,7 @@
                count(o.combo_id) AS cnt
         FROM dc_combo c
                  LEFT JOIN dc_order o ON c.id = o.combo_id
-        WHERE o.order_date = CURDATE()
+        WHERE o.order_date = CURDATE() AND o.del_flag = 0 AND o.status != 2
         GROUP BY c.id
     </select>
 
