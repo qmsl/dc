@@ -57,7 +57,7 @@ public class CheckOrderScheduling {
             orderService.updateById(order);
         }
 
-        wxMsgSend(orders, "您的订餐订单因数量不足5份被取消，请您及时更改订单套餐！");
+        wxMsgSend(orders, "您的订餐订单因套餐总订餐数量不足5份被取消，请您及时更改订单套餐！");
     }
 
     //定时器有间隔，最后几分钟的修改就更新不到，所以最后在确定下
