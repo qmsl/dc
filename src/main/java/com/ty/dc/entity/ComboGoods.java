@@ -2,13 +2,11 @@ package com.ty.dc.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ty.dc.base.BaseEntity;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author wen
@@ -18,6 +16,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @TableName("dc_combo_goods")
 @Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class ComboGoods extends BaseEntity {
 
     private static final long serialVersionUID = 1L;

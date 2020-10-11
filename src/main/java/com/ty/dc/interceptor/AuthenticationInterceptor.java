@@ -40,9 +40,10 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isBlank(token)) {
             token = request.getParameter("uid");
         }
+
         //如果上面都不存在，就从cookie里面取
-        if (StringUtils.isBlank(token)) {
-            Cookie[] cookies = request.getCookies();
+        Cookie[] cookies = request.getCookies();
+        if (StringUtils.isBlank(token) && null != cookies) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("uid")) {
                     token = cookie.getValue();

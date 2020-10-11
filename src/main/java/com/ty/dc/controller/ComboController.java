@@ -32,16 +32,19 @@ public class ComboController extends BaseController {
     @Autowired
     private IComboGoodsService comboGoodsService;
 
+    //获取当前启用的套餐列表
     @RequestMapping("list")
     public AjaxResult list() {
-        List<Combo> list = comboService.selectCombos();
+        List<Combo> list = comboService.listCombo(Combo.builder().status("1").build());
         return AjaxResult.success(list);
     }
 
+    //获取所有的套餐列表
     @RequestMapping("query")
     public AjaxResult query(Combo combo) {
-        List<Combo> list = comboService.list(new QueryWrapper<>(combo));
-        return AjaxResult.success(list);
+        startPage();
+        List<Combo> list = comboService.listCombo(combo);
+        return AjaxResult.success(getDataTable(list));
     }
 
     @RequestMapping("getComboCount")

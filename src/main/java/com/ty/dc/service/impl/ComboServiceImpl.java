@@ -21,12 +21,12 @@ import java.util.Map;
 public class ComboServiceImpl extends ServiceImpl<ComboMapper, Combo> implements IComboService {
 
     @Override
-    public List<Combo> selectCombos() {
-        return baseMapper.selectCombos();
+    public List getComboCount() {
+        return baseMapper.getComboCount();
     }
 
     @Override
-    public List getComboCount() {
-        return baseMapper.getComboCount();
+    public List<Combo> listCombo(Combo combo) {
+        return baseMapper.listCombo(combo);
     }
 }

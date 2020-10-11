@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ty.dc.mapper.ComboMapper">
     <resultMap type="com.ty.dc.entity.Combo" id="ComboResult">
-        <result property="id"    column="id"    />
-        <result property="delFlag"    column="del_flag"    />
-        <result property="crtTime"    column="crt_time"    />
-        <result property="upTime"    column="up_time"    />
-        <result property="comboName"    column="combo_name"    />
-        <result property="comboCode"    column="combo_code"    />
-        <result property="comboDesc"    column="combo_desc"    />
-        <result property="comboImg"    column="combo_img"    />
-        <result property="comboType"    column="combo_type"    />
-        <result property="status"    column="status"    />
+        <result property="id" column="id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="crtTime" column="crt_time"/>
+        <result property="upTime" column="up_time"/>
+        <result property="comboName" column="combo_name"/>
+        <result property="comboCode" column="combo_code"/>
+        <result property="comboDesc" column="combo_desc"/>
+        <result property="comboImg" column="combo_img"/>
+        <result property="comboType" column="combo_type"/>
+        <result property="status" column="status"/>
         <collection property="goods" javaType="java.util.ArrayList" ofType="com.ty.dc.entity.Goods">
-            <result property="id"    column="gid"    />
+            <result property="id" column="gid"/>
             <result property="goodsName" column="goods_name"/>
             <result property="goodsType" column="goods_type"/>
             <result property="goodsDesc" column="goods_desc"/>
@@ -21,35 +21,38 @@
         </collection>
     </resultMap>
 
-    <select id="selectCombos" resultMap="ComboResult">
-        SELECT
-            c.*,
-            g.goods_name,
-            goods_img,
-            g.goods_desc,
-            g.goods_type,
-            g.id AS gid
-        FROM
-            dc_combo c,
-            dc_combo_goods cg,
-            dc_goods g
-        WHERE
-            c.id = cg.combo_id
-          AND cg.goods_id = g.id
-          AND c.del_flag = 0
-          AND g.del_flag = 0
-          AND c.status = 1
+    <select id="getComboCount" resultType="java.util.HashMap">
+        SELECT c.id,
+               count(o.combo_id) AS cnt
+        FROM dc_combo c
+                 LEFT JOIN dc_order o ON c.id = o.combo_id
+        WHERE o.order_date = CURDATE()
+        GROUP BY c.id
     </select>
 
-    <select id="getComboCount" resultType="java.util.HashMap">
+
+    <select id="listCombo" resultMap="ComboResult" parameterType="Combo">
         SELECT
-            c.id,
-            count( o.combo_id ) AS cnt
+        c.*,
+        g.goods_name,
+        goods_img,
+        g.goods_desc,
+        g.goods_type,
+        g.id AS gid
         FROM
-            dc_combo c LEFT JOIN dc_order o ON c.id = o.combo_id
-        WHERE o.order_date = CURDATE()
-        GROUP BY
-            c.id
+        dc_combo c,
+        dc_combo_goods cg,
+        dc_goods g
+        WHERE
+        c.id = cg.combo_id
+        AND cg.goods_id = g.id
+        AND c.del_flag = 0
+        AND g.del_flag = 0
+        <if test="status != null and status != ''">AND c.status = #{status}</if>
+        <if test="comboName != null and comboName != ''">AND c.combo_name = #{comboName}</if>
+        <if test="comboCode != null and comboCode != ''">AND c.combo_code = #{comboCode}</if>
+        <if test="comboDesc != null and comboDesc != ''">AND c.combo_desc = #{comboDesc}</if>
+        <if test="comboType != null and comboType != ''">AND c.combo_type = #{comboType}</if>
     </select>
 
 </mapper>

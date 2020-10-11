@@ -3,8 +3,7 @@ package com.ty.dc.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ty.dc.base.BaseEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.util.List;
 
@@ -17,7 +16,10 @@ import java.util.List;
  * @since 2020-09-24
  */
 @Data
+@Builder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("dc_combo")
 public class Combo extends BaseEntity {
 

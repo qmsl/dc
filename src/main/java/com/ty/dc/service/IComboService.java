@@ -16,8 +16,7 @@ import java.util.Map;
  */
 public interface IComboService extends IService<Combo> {
 
-    List<Combo> selectCombos();
-
     List getComboCount();
 
+    List<Combo> listCombo(Combo combo);
 }
