@@ -25,6 +25,7 @@ public class Combo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @TableField
     private String comboName;
 
     private String comboCode;

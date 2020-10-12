@@ -20,4 +20,6 @@ public interface ComboMapper extends BaseMapper<Combo> {
     List<HashMap> getComboCount();
 
     List<Combo> listCombo(Combo combo);
+
+    Combo getByIdCustom(long id);
 }

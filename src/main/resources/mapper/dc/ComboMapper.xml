@@ -31,6 +31,26 @@
     </select>
 
 
+    <select id="getByIdCustom" resultMap="ComboResult" parameterType="java.lang.Long">
+        SELECT
+        c.*,
+        g.goods_name,
+        goods_img,
+        g.goods_desc,
+        g.goods_type,
+        g.id AS gid
+        FROM
+        dc_combo c,
+        dc_combo_goods cg,
+        dc_goods g
+        WHERE
+        c.id = cg.combo_id
+        AND cg.goods_id = g.id
+        AND c.del_flag = 0
+        AND g.del_flag = 0
+        AND c.id = #{id}
+    </select>
+
     <select id="listCombo" resultMap="ComboResult" parameterType="Combo">
         SELECT
         c.*,
@@ -49,9 +69,9 @@
         AND c.del_flag = 0
         AND g.del_flag = 0
         <if test="status != null and status != ''">AND c.status = #{status}</if>
-        <if test="comboName != null and comboName != ''">AND c.combo_name = #{comboName}</if>
+        <if test="comboName != null and comboName != ''">AND c.combo_name like concat('%', #{comboName}, '%')</if>
         <if test="comboCode != null and comboCode != ''">AND c.combo_code = #{comboCode}</if>
-        <if test="comboDesc != null and comboDesc != ''">AND c.combo_desc = #{comboDesc}</if>
+        <if test="comboDesc != null and comboDesc != ''">AND c.combo_desc like concat('%', #{comboDesc}, '%')</if>
         <if test="comboType != null and comboType != ''">AND c.combo_type = #{comboType}</if>
     </select>
 

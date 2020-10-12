@@ -5,6 +5,7 @@ import com.ty.dc.base.BaseController;
 import com.ty.dc.entity.Goods;
 import com.ty.dc.service.IGoodsService;
 import com.ty.dc.utils.AjaxResult;
+import com.ty.dc.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,9 +33,9 @@ public class GoodsController extends BaseController {
     }
 
     @RequestMapping("list")
-    public AjaxResult list(Goods goods) {
+    public AjaxResult list(String goodsName) {
         startPage();
-        List<Goods> list = goodsService.list(new QueryWrapper<>(goods));
+        List<Goods> list = goodsService.list(new QueryWrapper<Goods>().like(StringUtils.isNotEmpty(goodsName),"goods_name",goodsName));
         return AjaxResult.success(getDataTable(list));
     }
 

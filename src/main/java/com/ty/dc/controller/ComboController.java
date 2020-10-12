@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ty.dc.base.BaseController;
 import com.ty.dc.entity.Combo;
 import com.ty.dc.entity.ComboGoods;
+import com.ty.dc.entity.Goods;
 import com.ty.dc.service.IComboGoodsService;
 import com.ty.dc.service.IComboService;
+import com.ty.dc.service.IGoodsService;
 import com.ty.dc.utils.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,12 @@ public class ComboController extends BaseController {
 
     @Autowired
     private IComboGoodsService comboGoodsService;
+
+    @RequestMapping("find")
+    public AjaxResult findById(long id) {
+        Combo combo = comboService.getByIdCustom(id);
+        return AjaxResult.success(combo);
+    }
 
     //获取当前启用的套餐列表
     @RequestMapping("list")

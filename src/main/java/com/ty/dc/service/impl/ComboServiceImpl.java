@@ -1,6 +1,7 @@
 package com.ty.dc.service.impl;
 
 import com.ty.dc.entity.Combo;
+import com.ty.dc.entity.Goods;
 import com.ty.dc.mapper.ComboMapper;
 import com.ty.dc.service.IComboService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -29,5 +30,9 @@ public class ComboServiceImpl extends ServiceImpl<ComboMapper, Combo> implements
     @Override
     public List<Combo> listCombo(Combo combo) {
         return baseMapper.listCombo(combo);
+    }
+
+    public Combo getByIdCustom(long id){
+        return baseMapper.getByIdCustom(id);
     }
 }
