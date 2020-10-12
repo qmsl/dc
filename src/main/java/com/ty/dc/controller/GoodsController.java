@@ -36,18 +36,18 @@ public class GoodsController extends BaseController {
     @RequestMapping("add")
     public AjaxResult add(Goods goods) {
         boolean isOk = goodsService.save(goods);
-        return AjaxResult.success(isOk);
+        return AjaxResult.status(isOk);
     }
 
     @RequestMapping("del")
     public AjaxResult del(long id) {
         boolean isOk = goodsService.removeById(id);
-        return AjaxResult.success(isOk);
+        return AjaxResult.status(isOk);
     }
 
     @RequestMapping("mod")
     public AjaxResult mod(Goods goods) {
         boolean isOk = goodsService.updateById(goods);
-        return AjaxResult.success(isOk);
+        return AjaxResult.status(isOk);
     }
 }

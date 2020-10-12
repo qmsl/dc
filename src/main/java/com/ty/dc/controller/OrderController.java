@@ -63,7 +63,7 @@ public class OrderController extends BaseController {
         order.setEveDesc(eveDesc);
         boolean isOk = orderService.updateById(order);
 
-        return AjaxResult.success(isOk);
+        return AjaxResult.status(isOk);
     }
 
     //获取我的订单列表
@@ -109,7 +109,7 @@ public class OrderController extends BaseController {
         //order.setOrderNum(combo.getComboCode() + "-" + DateUtils.dateTimeNow());
 
         boolean isOk = orderService.updateById(order);
-        return AjaxResult.success(isOk);
+        return AjaxResult.status(isOk);
     }
 
     //增加订单
@@ -150,7 +150,7 @@ public class OrderController extends BaseController {
         order.setOrderDate(LocalDate.now());
 
         boolean isOk = orderService.save(order);
-        return AjaxResult.success(isOk);
+        return AjaxResult.status(isOk);
     }
 
     //删除订单
@@ -162,7 +162,7 @@ public class OrderController extends BaseController {
             return AjaxResult.error("订单不正确");
         }
         boolean isOk = orderService.removeById(id);
-        return AjaxResult.success(isOk);
+        return AjaxResult.status(isOk);
     }
 
     //取消订单
@@ -175,7 +175,7 @@ public class OrderController extends BaseController {
         }
         order.setStatus("2");
         boolean isOk = orderService.updateById(order);
-        return AjaxResult.success(isOk);
+        return AjaxResult.status(isOk);
     }
 
     //统计各菜品的点评人数

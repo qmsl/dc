@@ -63,7 +63,7 @@ public class ComboController extends BaseController {
             tmpList.add(comboGoods);
         }
         boolean idOk2 = comboGoodsService.saveBatch(tmpList);
-        return AjaxResult.success(idOk1 && idOk2);
+        return AjaxResult.status(idOk1 && idOk2);
     }
 
     @RequestMapping("upStatus")
@@ -94,13 +94,13 @@ public class ComboController extends BaseController {
         }
         boolean isOk2 = comboGoodsService.remove(new QueryWrapper<ComboGoods>().eq("combo_id", combo.getId()));
         boolean idOk3 = comboGoodsService.saveBatch(tmpList);
-        return AjaxResult.success(idOk1 && isOk2 && idOk3);
+        return AjaxResult.status(idOk1 && isOk2 && idOk3);
     }
 
     @RequestMapping("del")
     public AjaxResult del(Long comboId) {
         boolean isOk1 = comboService.removeById(comboId);
         boolean isOk2 = comboGoodsService.remove(new QueryWrapper<ComboGoods>().eq("combo_id", comboId));
-        return AjaxResult.success(isOk1 && isOk2);
+        return AjaxResult.status(isOk1 && isOk2);
     }
 }

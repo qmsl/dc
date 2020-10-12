@@ -179,5 +179,13 @@ public class AjaxResult extends HashMap<String, Object>
         return new AjaxResult(Type.ERROR, msg, data);
     }
 
+    public static AjaxResult status(boolean status)
+    {
+        if(status){
+            return AjaxResult.success();
+        } else {
+            return AjaxResult.error();
+        }
 
+    }
 }
