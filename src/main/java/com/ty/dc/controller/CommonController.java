@@ -1,5 +1,6 @@
 package com.ty.dc.controller;
 
+import com.ty.dc.interceptor.AuthIgnore;
 import com.ty.dc.utils.AjaxResult;
 import com.ty.dc.utils.Constants;
 import com.ty.dc.utils.Global;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -32,7 +32,7 @@ public class CommonController {
      */
     @PostMapping("/common/upload")
     @ResponseBody
-    public AjaxResult uploadFile(MultipartFile file) throws Exception {
+    public AjaxResult uploadFile(MultipartFile file) {
         try {
             // 上传文件路径
             String filePath = Global.getUploadPath();
@@ -52,7 +52,8 @@ public class CommonController {
      * 本地资源通用下载
      */
     @GetMapping("/common/download")
-    public void resourceDownload(String fileName, HttpServletRequest request, HttpServletResponse response)
+    @AuthIgnore
+    public void resourceDownload(String fileName, HttpServletResponse response)
             throws Exception {
         // 本地资源路径
         String localPath = Global.getProfile();
