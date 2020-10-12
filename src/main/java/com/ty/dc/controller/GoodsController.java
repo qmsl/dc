@@ -26,6 +26,11 @@ public class GoodsController extends BaseController {
     @Autowired
     private IGoodsService goodsService;
 
+    @RequestMapping("find")
+    public AjaxResult findById(long id) {
+        return AjaxResult.success(goodsService.getById(id));
+    }
+
     @RequestMapping("list")
     public AjaxResult list(Goods goods) {
         startPage();
