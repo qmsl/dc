@@ -3,6 +3,8 @@ package com.ty.dc.mapper;
 import com.ty.dc.entity.Goods;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface GoodsMapper extends BaseMapper<Goods> {
 
+    List<Goods> getByComboId(Long comboId);
 }
