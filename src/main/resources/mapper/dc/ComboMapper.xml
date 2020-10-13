@@ -56,7 +56,7 @@
         SELECT
         c.*,
         g.goods_name,
-        goods_img,
+        g.goods_img,
         g.goods_desc,
         g.goods_type,
         g.id AS gid
