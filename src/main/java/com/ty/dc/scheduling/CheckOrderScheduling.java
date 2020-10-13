@@ -47,7 +47,7 @@ public class CheckOrderScheduling {
     private HashSet<String> users = new HashSet<>();
 
     //点餐截止时间为14点整，订单截止修改时间16点
-    @Scheduled(cron = "0/10 * 14-16 * * ?")
+    @Scheduled(cron = "0/10 * 14-15 * * ?")
     void preCheckOrder() {
 
         //首先把所有订单改状态为1(新下单)改成0(已确认)状态,此时不可以新建订单了
@@ -69,7 +69,7 @@ public class CheckOrderScheduling {
     }
 
     //定时器有间隔，最后几分钟的修改就更新不到，所以最后在确定下
-    @Scheduled(cron = "1 0 17 * * ?")
+    @Scheduled(cron = "0 0 16 * * ?")
     void finalCheckOrder() {
         preCheckOrder();//最后执行一次，这次还没有达到额定份数的订单就给取消掉
         List<Order> orders = orderService.list(new QueryWrapper<Order>()
@@ -80,11 +80,12 @@ public class CheckOrderScheduling {
             order.setStatus("2");//把状态修改为已取消状态
             orderService.updateById(order);
         }
+
+        users.clear();//最后一次处理完成后清理缓存的已经发送通知的用户,先清理掉缓存，避免最后一次取消订单消息没有发送出去
+
         wxMsgSend(orders, "您的订餐订单因数量不足5份被取消！");
 
         initComboCount();//把当天的订单统计数据归档，方便查询
-
-        users.clear();//最后一次处理完成后清理缓存的已经发送通知的用户
     }
 
     @Async

@@ -67,7 +67,7 @@ public class ComboController extends BaseController {
         boolean idOk1 = comboService.save(combo);
         List<ComboGoods> tmpList = new ArrayList<>();
         for (String goodsId : goodIds.split(",")) {
-            ComboGoods comboGoods = ComboGoods.builder().comboId(combo.getId()).goodsId(Long.parseLong(goodsId)).build();
+            ComboGoods comboGoods = ComboGoods.builder().comboId(combo.getId()).goodsId(Long.parseLong(goodsId)).status("1").build();
             tmpList.add(comboGoods);
         }
         boolean idOk2 = comboGoodsService.saveBatch(tmpList);

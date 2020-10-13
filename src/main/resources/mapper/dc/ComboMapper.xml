@@ -68,6 +68,7 @@
         AND cg.goods_id = g.id
         AND c.del_flag = 0
         AND g.del_flag = 0
+        AND cg.del_flag = 0
         <if test="status != null and status != ''">AND c.status = #{status}</if>
         <if test="comboName != null and comboName != ''">AND c.combo_name like concat('%', #{comboName}, '%')</if>
         <if test="comboCode != null and comboCode != ''">AND c.combo_code = #{comboCode}</if>
