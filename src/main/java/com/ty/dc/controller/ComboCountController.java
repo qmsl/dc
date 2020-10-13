@@ -39,8 +39,9 @@ public class ComboCountController extends BaseController {
     //获取历史订单统计数据，前端传入时间段进行查询
     @RequestMapping("list")
     public AjaxResult list(Date startDate, Date endDate) {
+        startPage();
         List<ComboCount> list = comboCountService.listComboCount(startDate, endDate);
-        return AjaxResult.success(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     //获取今日订单统计数据，今日统计数据是实时数据
