@@ -33,9 +33,13 @@ public class GoodsController extends BaseController {
     }
 
     @RequestMapping("list")
-    public AjaxResult list(String goodsName) {
+    public AjaxResult list(String goodsName, String comboType) {
         startPage();
-        List<Goods> list = goodsService.list(new QueryWrapper<Goods>().like(StringUtils.isNotEmpty(goodsName),"goods_name",goodsName));
+        List<Goods> list = goodsService.list(new QueryWrapper<Goods>()
+                .like(StringUtils.isNotEmpty(goodsName), "goods_name", goodsName)
+                .in(StringUtils.isNotEmpty(comboType) && comboType.equals("1"), "goods_type", "1", "2", "3", "4")
+                .eq(StringUtils.isNotEmpty(comboType) && comboType.equals("2"), "goods_type", "5")
+        );
         return AjaxResult.success(getDataTable(list));
     }
 
