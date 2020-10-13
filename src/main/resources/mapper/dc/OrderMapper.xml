@@ -44,7 +44,7 @@
              GROUP BY o.combo_id
              ) t
         WHERE c.id = t.combo_id
-        ORDER BY t.cnt ASC LIMIT #{num}
+        ORDER BY t.avg ASC LIMIT #{num}
     </select>
 
     <select id="getOrderScoreMax" resultType="java.util.HashMap">
@@ -59,7 +59,7 @@
                 <if test="endDate != null">AND o.order_date &lt;= #{endDate}</if>
             GROUP BY o.combo_id) t
         WHERE c.id = t.combo_id
-        ORDER BY t.cnt DESC LIMIT #{num}
+        ORDER BY t.avg DESC LIMIT #{num}
     </select>
 
 

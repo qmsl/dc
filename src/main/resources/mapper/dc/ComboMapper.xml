@@ -41,24 +41,24 @@
             g.id AS gid
         FROM
             dc_combo c
-            LEFT JOIN (select combo_id,goods_id FROM dc_combo_goods where del_flag = 0) cg ON c.id = cg.combo_id
-            LEFT JOIN (select * FROM dc_goods where del_flag = 0) g ON cg.goods_id = g.id
+            LEFT JOIN dc_combo_goods cg ON (c.id = cg.combo_id AND cg.del_flag = 0)
+            LEFT JOIN dc_goods g ON (cg.goods_id = g.id AND g.del_flag = 0)
         WHERE  c.del_flag = 0
         AND c.id = #{id}
     </select>
 
     <select id="listCombo" resultMap="ComboResult" parameterType="Combo">
         SELECT
-        c.*,
-        g.goods_name,
-        g.goods_img,
-        g.goods_desc,
-        g.goods_type,
-        g.id AS gid
+            c.*,
+            g.goods_name,
+            g.goods_img,
+            g.goods_desc,
+            g.goods_type,
+            g.id AS gid
         FROM
-        dc_combo c
-        LEFT JOIN (select combo_id,goods_id FROM dc_combo_goods where del_flag = 0) cg ON c.id = cg.combo_id
-        LEFT JOIN (select * FROM dc_goods where del_flag = 0) g ON cg.goods_id = g.id
+            dc_combo c
+            LEFT JOIN dc_combo_goods cg ON (c.id = cg.combo_id AND cg.del_flag = 0)
+            LEFT JOIN dc_goods g ON (cg.goods_id = g.id AND g.del_flag = 0)
         WHERE  c.del_flag = 0
         <if test="status != null and status != ''">AND c.status = #{status}</if>
         <if test="comboName != null and comboName != ''">AND c.combo_name like concat('%', #{comboName}, '%')</if>
