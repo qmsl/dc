@@ -5,7 +5,10 @@
     <select id="listComboCount" resultType="ComboCount">
         SELECT t.combo_code,t.combo_desc,t.combo_img,t.combo_name,t.combo_type ,SUM(t.count) as count
         FROM dc_combo_count t
-        WHERE order_date >= #{startDate} AND order_date &lt;= #{endDate}
+        <where>
+            <if test="startDate != null">AND order_date >= #{startDate}</if>
+            <if test="endDate != null">AND order_date &lt;= #{endDate}</if>
+        </where>
         GROUP BY t.combo_code,t.combo_desc,t.combo_img,t.combo_name,t.combo_type
     </select>
 </mapper>
