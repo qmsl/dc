@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>认证页面</title>
+	<title>认证</title>
 </head>
 <body onload="onload()"></body>
 <script type="text/javascript">
@@ -16,8 +16,12 @@
             if (null != state && undefined != state) {
                 if (state == 1) {
                     window.location.href = "/#/auth?sid="+uid+"&action=list"
-                } else {
+                } else if(state ==2) {
                     window.location.href = "/#/auth?sid="+uid+"&action=scan"
+                } else if(state==3){
+                    window.location.href = "/admin/"
+                } else {
+                    window.location.href = "404.html"
                 }
             }
         }

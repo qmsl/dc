@@ -58,7 +58,7 @@ public class ComboCountController extends BaseController {
             comboCount.setCount(0);//先设置为0，如果有数据下面就设置成实际数量
             for (HashMap map : retval) {
                 if (map.get("id").toString().equals(combo.getId().toString())) {
-                    comboCount.setCount((Integer) map.get("cnt"));
+                    comboCount.setCount(Integer.valueOf(map.get("cnt").toString()));
                 }
             }
             comboCounts.add(comboCount);

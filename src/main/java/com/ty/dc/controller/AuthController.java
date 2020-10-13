@@ -43,6 +43,22 @@ public class AuthController extends BaseController {
         return "auth";
     }
 
+    @RequestMapping("bindex")
+    @AuthIgnore
+    public String bndex() {
+
+        Cookie cookie1 = new Cookie("uid", "z4suh8h");
+        cookie1.setPath("/");
+        cookie1.setMaxAge(-1);
+        getResponse().addCookie(cookie1);
+
+        Cookie cookie = new Cookie("state", "3");
+        cookie.setPath("/");
+        cookie.setMaxAge(-1);
+        getResponse().addCookie(cookie);
+        return "auth";
+    }
+
     @RequestMapping("auth")
     @AuthIgnore
     public String auth(@CookieValue String state) {
