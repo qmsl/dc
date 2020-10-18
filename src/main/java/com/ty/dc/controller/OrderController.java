@@ -204,7 +204,7 @@ public class OrderController extends BaseController {
     public AjaxResult getUserEveCountList() {
         startPage();
         List<HashMap> list = orderService.getUserEveCountList();
-        return AjaxResult.success(list);
+        return AjaxResult.success(getDataTable(list));
     }
 
     //获取订单信息/用户的评价 都可以获取
