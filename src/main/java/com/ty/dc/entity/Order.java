@@ -83,5 +83,6 @@ public class Order extends BaseEntity {
      */
     private String eveDesc;
 
+    private String cookName;
 
 }

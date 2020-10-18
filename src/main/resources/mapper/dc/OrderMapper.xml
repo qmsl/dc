@@ -31,38 +31,63 @@
         order by t.avg desc, t.cnt desc
     </select>
 
+    <!--
+        <select id="getOrderScoreMin" resultType="java.util.HashMap">
+            SELECT c.*,IFNULL(t.avg,0) as avg
+            FROM dc_combo c LEFT JOIN
+                 (SELECT o.combo_id,sum(eve_score) as cnt,AVG(eve_score) as avg
+                 FROM dc_order o
+                 WHERE o.del_flag = 0
+                   AND o.status != 2
+                   AND o.eve_score is not null
+                    <if test="startDate != null">AND o.order_date >= #{startDate}</if>
+                    <if test="endDate != null">AND o.order_date &lt;= #{endDate}</if>
+                 GROUP BY o.combo_id
+                 ) t
+            ON c.id = t.combo_id
+            ORDER BY t.avg ASC LIMIT #{num}
+        </select>
 
+        <select id="getOrderScoreMax" resultType="java.util.HashMap">
+            SELECT c.*,IFNULL(t.avg,0) as avg
+            FROM dc_combo c LEFT JOIN
+                (SELECT o.combo_id,sum(eve_score) as cnt,AVG(eve_score) as avg
+                FROM dc_order o
+                WHERE o.del_flag = 0
+                  AND o.status != 2
+                  AND o.eve_score is not null
+                    <if test="startDate != null">AND o.order_date >= #{startDate}</if>
+                    <if test="endDate != null">AND o.order_date &lt;= #{endDate}</if>
+                GROUP BY o.combo_id) t
+            ON c.id = t.combo_id
+            ORDER BY t.avg DESC LIMIT #{num}
+        </select>
+        -->
     <select id="getOrderScoreMin" resultType="java.util.HashMap">
-        SELECT c.*,IFNULL(t.avg,0) as avg
-        FROM dc_combo c LEFT JOIN
-             (SELECT o.combo_id,sum(eve_score) as cnt,AVG(eve_score) as avg
-             FROM dc_order o
-             WHERE o.del_flag = 0
-               AND o.status != 2
-               AND o.eve_score is not null
-                <if test="startDate != null">AND o.order_date >= #{startDate}</if>
-                <if test="endDate != null">AND o.order_date &lt;= #{endDate}</if>
-             GROUP BY o.combo_id
-             ) t
-        ON c.id = t.combo_id
-        ORDER BY t.avg ASC LIMIT #{num}
+        select g.id,g.goods_name,IFNULL(avg(o.eve_score),0) as avg,o.cook_name
+        from dc_order o , dc_combo_goods cg, dc_goods g
+        WHERE o.combo_id = cg.combo_id and cg.goods_id = g.id
+          AND o.del_flag = 0
+          AND o.status = 0
+          AND o.eve_score is not null
+        <if test="startDate != null">AND o.order_date >= #{startDate}</if>
+        <if test="endDate != null">AND o.order_date &lt;= #{endDate}</if>
+        GROUP BY g.id,o.cook_name
+        ORDER BY avg ASC LIMIT #{num}
     </select>
 
     <select id="getOrderScoreMax" resultType="java.util.HashMap">
-        SELECT c.*,IFNULL(t.avg,0) as avg
-        FROM dc_combo c LEFT JOIN
-            (SELECT o.combo_id,sum(eve_score) as cnt,AVG(eve_score) as avg
-            FROM dc_order o
-            WHERE o.del_flag = 0
-              AND o.status != 2
-              AND o.eve_score is not null
-                <if test="startDate != null">AND o.order_date >= #{startDate}</if>
-                <if test="endDate != null">AND o.order_date &lt;= #{endDate}</if>
-            GROUP BY o.combo_id) t
-        ON c.id = t.combo_id
-        ORDER BY t.avg DESC LIMIT #{num}
+        select g.id,g.goods_name,IFNULL(avg(o.eve_score),0) as avg,o.cook_name
+        from dc_order o , dc_combo_goods cg, dc_goods g
+        WHERE o.combo_id = cg.combo_id and cg.goods_id = g.id
+        AND o.del_flag = 0
+        AND o.status = 0
+        AND o.eve_score is not null
+        <if test="startDate != null">AND o.order_date >= #{startDate}</if>
+        <if test="endDate != null">AND o.order_date &lt;= #{endDate}</if>
+        GROUP BY g.id,o.cook_name
+        ORDER BY avg DESC LIMIT #{num}
     </select>
-
 
     <select id="getUserEveCountList" resultType="java.util.HashMap">
         select o.user_id,o.user_name,count(o.eve_score) as cnt

@@ -146,6 +146,7 @@ public class OrderController extends BaseController {
         order.setComboType(combo.getComboType());
         order.setComboId(comboId);
         order.setComboImg(combo.getComboImg());
+        order.setCookName(combo.getCookName());
         //order.setOrderNum(combo.getComboCode() + "-" + DateUtils.dateTimeNow());
         order.setOrderDate(LocalDate.now());
 
