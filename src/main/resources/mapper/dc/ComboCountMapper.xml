@@ -12,7 +12,7 @@
         GROUP BY t.combo_code,t.combo_desc,t.combo_img,t.combo_name,t.combo_type
     </select>
 
-    <select id="getOrderCnt" resultType="java.util.HashMap">
+    <select id="getOrderCnt" resultType="GoodsCount">
         select g.id,g.goods_name,IFNULL(count(g.id),0) as cnt,o.cook_name
         from dc_order o , dc_combo_goods cg, dc_goods g
         WHERE o.combo_id = cg.combo_id and cg.goods_id = g.id

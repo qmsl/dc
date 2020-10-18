@@ -1,6 +1,7 @@
 package com.ty.dc.service.impl;
 
 import com.ty.dc.entity.ComboCount;
+import com.ty.dc.entity.GoodsCount;
 import com.ty.dc.mapper.ComboCountMapper;
 import com.ty.dc.service.IComboCountService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -27,7 +28,7 @@ public class ComboCountServiceImpl extends ServiceImpl<ComboCountMapper, ComboCo
     }
 
     @Override
-    public List<HashMap> getOrderCnt(Date startDate, Date endDate) {
+    public List<GoodsCount> getOrderCnt(Date startDate, Date endDate) {
         return baseMapper.getOrderCnt(startDate, endDate);
     }
 }

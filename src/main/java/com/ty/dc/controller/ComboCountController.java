@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ty.dc.base.BaseController;
 import com.ty.dc.entity.Combo;
 import com.ty.dc.entity.ComboCount;
+import com.ty.dc.entity.GoodsCount;
 import com.ty.dc.service.IComboCountService;
 import com.ty.dc.service.IComboService;
 import com.ty.dc.utils.AjaxResult;
+import com.ty.dc.utils.ExcelUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,12 +41,21 @@ public class ComboCountController extends BaseController {
     //获取历史订单统计数据，前端传入时间段进行查询，查询当天的传当天的日期给startDate
     @RequestMapping("list")
     public AjaxResult list(Date startDate, Date endDate) {
-        List<HashMap> list = comboCountService.getOrderCnt(startDate, endDate);
+        List<GoodsCount> list = comboCountService.getOrderCnt(startDate, endDate);
         return AjaxResult.success(list);
         /*
         startPage();
         List<ComboCount> list = comboCountService.listComboCount(startDate, endDate);
         return AjaxResult.success(getDataTable(list));*/
+    }
+
+    //获取历史订单统计数据，前端传入时间段进行查询，查询当天的传当天的日期给startDate
+    @RequestMapping("export")
+    public AjaxResult export(Date startDate, Date endDate) {
+        List<GoodsCount> list = comboCountService.getOrderCnt(startDate, endDate);
+
+        ExcelUtil<GoodsCount> util = new ExcelUtil<>(GoodsCount.class);
+        return util.exportExcel(list, "订单统计");
     }
 
     /*//获取今日订单统计数据，今日统计数据是实时数据
