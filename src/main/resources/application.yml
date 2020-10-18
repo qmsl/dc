@@ -1,6 +1,6 @@
 dc:
-  profile: d:\data
-  redirecturl: https://cgwework.sz.gov.cn
+  profile: data
+  redirecturl: fd.huhanyi.com
 server:
   port: 8081
   servlet:
@@ -9,9 +9,6 @@ server:
     uri-encoding: UTF-8
     max-threads: 10
     min-spare-threads: 5
-logging:
-  level:
-    org.springframework: warn
 spring:
   mvc:
     view:
@@ -59,6 +56,8 @@ spring:
             multi-statement-allow: true
 mybatis-plus:
   typeAliasesPackage: com.ty.dc.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
     db-config:

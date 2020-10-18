@@ -36,6 +36,9 @@ public class Combo extends BaseEntity {
 
     private String comboType;
 
+    private String cookName;
+
+    private String cookImg;
     /**
      * 状态；1，正常；2停用
      */

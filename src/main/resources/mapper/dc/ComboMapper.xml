@@ -11,6 +11,8 @@
         <result property="comboDesc" column="combo_desc"/>
         <result property="comboImg" column="combo_img"/>
         <result property="comboType" column="combo_type"/>
+        <result property="cookImg" column="cook_img"/>
+        <result property="cookName" column="cook_name"/>
         <result property="status" column="status"/>
         <collection property="goods" javaType="java.util.ArrayList" ofType="com.ty.dc.entity.Goods">
             <result property="id" column="gid"/>
@@ -59,6 +61,17 @@
             dc_combo c
             LEFT JOIN dc_combo_goods cg ON (c.id = cg.combo_id AND cg.del_flag = 0)
             LEFT JOIN dc_goods g ON (cg.goods_id = g.id AND g.del_flag = 0)
+        WHERE  c.del_flag = 0
+        <if test="status != null and status != ''">AND c.status = #{status}</if>
+        <if test="comboName != null and comboName != ''">AND c.combo_name like concat('%', #{comboName}, '%')</if>
+        <if test="comboCode != null and comboCode != ''">AND c.combo_code = #{comboCode}</if>
+        <if test="comboDesc != null and comboDesc != ''">AND c.combo_desc like concat('%', #{comboDesc}, '%')</if>
+        <if test="comboType != null and comboType != ''">AND c.combo_type = #{comboType}</if>
+    </select>
+
+    <select id="listCombo_COUNT" resultType="Long" parameterType="Combo">
+        SELECT COUNT(*) FROM
+        dc_combo c
         WHERE  c.del_flag = 0
         <if test="status != null and status != ''">AND c.status = #{status}</if>
         <if test="comboName != null and comboName != ''">AND c.combo_name like concat('%', #{comboName}, '%')</if>

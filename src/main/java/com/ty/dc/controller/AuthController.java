@@ -3,6 +3,7 @@ package com.ty.dc.controller;
 import com.ty.dc.base.BaseController;
 import com.ty.dc.interceptor.AuthIgnore;
 import com.ty.dc.utils.Global;
+import com.ty.dc.utils.StringUtils;
 import com.ty.dc.weixin.WxCpConfiguration;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.cp.api.WxCpService;

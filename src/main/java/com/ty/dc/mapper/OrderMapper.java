@@ -24,4 +24,7 @@ public interface OrderMapper extends BaseMapper<Order> {
     List<HashMap> getOrderScoreMax(Date startDate, Date endDate, int num);
 
     List<HashMap> getOrderPersonCnt(Date startDate, Date endDate);
+
+    List<HashMap> getUserEveCountList();
+
 }

@@ -32,6 +32,11 @@ public class GoodsController extends BaseController {
         return AjaxResult.success(goodsService.getById(id));
     }
 
+    @RequestMapping("findByComboId")
+    public AjaxResult findByComboId(long comboId) {
+        return AjaxResult.success(goodsService.getByComboId(comboId));
+    }
+
     @RequestMapping("list")
     public AjaxResult list(String goodsName, String comboType) {
         startPage();
@@ -39,6 +44,7 @@ public class GoodsController extends BaseController {
                 .like(StringUtils.isNotEmpty(goodsName), "goods_name", goodsName)
                 .in(StringUtils.isNotEmpty(comboType) && comboType.equals("1"), "goods_type", "1", "2", "3", "4")
                 .eq(StringUtils.isNotEmpty(comboType) && comboType.equals("2"), "goods_type", "5")
+                .eq(StringUtils.isNotEmpty(comboType) && comboType.equals("3"), "goods_type", "6")
         );
         return AjaxResult.success(getDataTable(list));
     }

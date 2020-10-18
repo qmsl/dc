@@ -40,4 +40,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         }
 
     }
+
+    @Override
+    public List<HashMap> getUserEveCountList() {
+        return baseMapper.getUserEveCountList();
+    }
 }

@@ -35,13 +35,13 @@ public class ComboServiceImpl extends ServiceImpl<ComboMapper, Combo> implements
 
     @Override
     public List<Combo> listCombo(Combo combo) {
-        /*List<Combo> combos = baseMapper.selectList(new QueryWrapper<>(combo));
+        List<Combo> combos = baseMapper.selectList(new QueryWrapper<>(combo));
         if(null == combos){return null;}
         for(Combo combo1 : combos){
             combo1.setGoods(goodsService.getByComboId(combo1.getId()));
         }
-        return combos;*/
-        return baseMapper.listCombo(combo);
+        return combos;
+        /*return baseMapper.listCombo(combo);*/
     }
 
     public Combo getByIdCustom(long id){

@@ -28,6 +28,7 @@
              GROUP BY o.combo_id
              ) t
         ON c.id = t.combo_id
+        order by t.avg desc, t.cnt desc
     </select>
 
 
@@ -62,6 +63,15 @@
         ORDER BY t.avg DESC LIMIT #{num}
     </select>
 
+
+    <select id="getUserEveCountList" resultType="java.util.HashMap">
+        select o.user_id,o.user_name,count(o.eve_score) as cnt
+        from dc_order o
+        WHERE o.del_flag = 0
+          AND o.status != 2
+          AND o.eve_score is not null
+        GROUP BY o.user_id, o.user_name
+    </select>
 
 
 </mapper>
