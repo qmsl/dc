@@ -45,4 +45,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public List<HashMap> getUserEveCountList() {
         return baseMapper.getUserEveCountList();
     }
+
+    @Override
+    public List<Order> getOrderByGoodsId(long goodsId) {
+        return baseMapper.getOrderByGoodsId(goodsId);
+
+    }
 }

@@ -27,4 +27,5 @@ public interface OrderMapper extends BaseMapper<Order> {
 
     List<HashMap> getUserEveCountList();
 
+    List<Order> getOrderByGoodsId(long goodsId);
 }

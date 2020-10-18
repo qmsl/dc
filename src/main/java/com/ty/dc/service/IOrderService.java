@@ -24,4 +24,6 @@ public interface IOrderService extends IService<Order> {
     List<HashMap> getOrderScore(Date startDate, Date endDate, String type, int num);
 
     List<HashMap> getUserEveCountList();
+
+    List<Order> getOrderByGoodsId(long goodsId);
 }

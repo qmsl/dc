@@ -98,5 +98,12 @@
         GROUP BY o.user_id, o.user_name
     </select>
 
+    <select id="getOrderByGoodsId" resultType="com.ty.dc.entity.Order">
+        select o.* FROM dc_order o ,(select DISTINCT(cg.combo_id) as combo_id FROM dc_combo_goods cg WHERE cg.goods_id = '5') t
+        where t.combo_id = o.combo_id
+          AND o.del_flag = 0
+          AND o.status = 0
+          AND o.eve_score is not null
+    </select>
 
 </mapper>

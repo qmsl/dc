@@ -193,10 +193,12 @@ public class OrderController extends BaseController {
         return AjaxResult.success(data);
     }
 
-    @RequestMapping("getEveDetailByComboId")
-    public AjaxResult getEveByComboId(long comboId) {
-        List<Order> orders = orderService.list(new QueryWrapper<Order>().eq("combo_id",comboId));
-        return AjaxResult.success(orders);
+    @RequestMapping("getOrderByGoodsId")
+    public AjaxResult getOrderByGoodsId(long goodsId) {
+        startPage();
+        List<Order> orders = orderService.getOrderByGoodsId(goodsId);
+        //List<Order> orders = orderService.list(new QueryWrapper<Order>().eq("combo_id",comboId));
+        return AjaxResult.success(getDataTable(orders));
     }
 
     //点评人员list接口，获取每个用户的统计信息明细
