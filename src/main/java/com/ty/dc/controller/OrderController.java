@@ -193,6 +193,7 @@ public class OrderController extends BaseController {
         return AjaxResult.success(data);
     }
 
+    //通过商品ID查询评价列表.前端没用
     @RequestMapping("getOrderByGoodsId")
     public AjaxResult getOrderByGoodsId(long goodsId) {
         startPage();

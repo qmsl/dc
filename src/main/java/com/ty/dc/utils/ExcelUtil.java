@@ -361,7 +361,7 @@ public class ExcelUtil<T> {
             String filename = encodingFilename(sheetName);
             out = new FileOutputStream(getAbsoluteFile(filename));
             wb.write(out);
-            return AjaxResult.success("/profile/download/"+filename);
+            return AjaxResult.success(filename);
         } catch (Exception e) {
             log.error("导出Excel异常{}", e.getMessage());
             throw new BaseException("导出Excel失败，请联系网站管理员！");

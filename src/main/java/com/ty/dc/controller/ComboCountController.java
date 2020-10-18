@@ -1,23 +1,25 @@
 package com.ty.dc.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ty.dc.base.BaseController;
-import com.ty.dc.entity.Combo;
-import com.ty.dc.entity.ComboCount;
 import com.ty.dc.entity.GoodsCount;
 import com.ty.dc.service.IComboCountService;
 import com.ty.dc.service.IComboService;
 import com.ty.dc.utils.AjaxResult;
 import com.ty.dc.utils.ExcelUtil;
-import org.springframework.beans.BeanUtils;
+import com.ty.dc.utils.Global;
+import com.ty.dc.utils.file.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,7 +30,7 @@ import java.util.List;
  * @author wen
  * @since 2020-10-11
  */
-@RestController
+@Controller
 @RequestMapping("/dc/comboCount")
 public class ComboCountController extends BaseController {
 
@@ -40,6 +42,7 @@ public class ComboCountController extends BaseController {
 
     //获取历史订单统计数据，前端传入时间段进行查询，查询当天的传当天的日期给startDate
     @RequestMapping("list")
+    @ResponseBody
     public AjaxResult list(Date startDate, Date endDate) {
         List<GoodsCount> list = comboCountService.getOrderCnt(startDate, endDate);
         return AjaxResult.success(list);
@@ -51,11 +54,18 @@ public class ComboCountController extends BaseController {
 
     //获取历史订单统计数据，前端传入时间段进行查询，查询当天的传当天的日期给startDate
     @RequestMapping("export")
-    public AjaxResult export(Date startDate, Date endDate) {
+    public void export(Date startDate, Date endDate, HttpServletResponse response) throws IOException {
         List<GoodsCount> list = comboCountService.getOrderCnt(startDate, endDate);
 
         ExcelUtil<GoodsCount> util = new ExcelUtil<>(GoodsCount.class);
-        return util.exportExcel(list, "订单统计");
+
+        AjaxResult ajaxResult = util.exportExcel(list, "订单统计");
+
+        String downloadPath = Global.getDownloadPath() + ajaxResult.get("msg").toString();
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        FileUtils.setAttachmentResponseHeader(response, ajaxResult.get("msg").toString());
+
+        FileUtils.writeBytes(downloadPath, response.getOutputStream());
     }
 
     /*//获取今日订单统计数据，今日统计数据是实时数据
