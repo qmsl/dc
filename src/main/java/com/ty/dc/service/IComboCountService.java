@@ -4,6 +4,7 @@ import com.ty.dc.entity.ComboCount;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -17,4 +18,6 @@ import java.util.List;
 public interface IComboCountService extends IService<ComboCount> {
 
     List<ComboCount> listComboCount(Date startDate, Date endDate);
+
+    List<HashMap> getOrderCnt(Date startDate, Date endDate);
 }

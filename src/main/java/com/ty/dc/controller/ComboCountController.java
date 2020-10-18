@@ -36,15 +36,18 @@ public class ComboCountController extends BaseController {
     @Autowired
     private IComboCountService comboCountService;
 
-    //获取历史订单统计数据，前端传入时间段进行查询
+    //获取历史订单统计数据，前端传入时间段进行查询，查询当天的传当天的日期给startDate
     @RequestMapping("list")
     public AjaxResult list(Date startDate, Date endDate) {
+        List<HashMap> list = comboCountService.getOrderCnt(startDate, endDate);
+        return AjaxResult.success(list);
+        /*
         startPage();
         List<ComboCount> list = comboCountService.listComboCount(startDate, endDate);
-        return AjaxResult.success(getDataTable(list));
+        return AjaxResult.success(getDataTable(list));*/
     }
 
-    //获取今日订单统计数据，今日统计数据是实时数据
+    /*//获取今日订单统计数据，今日统计数据是实时数据
     @RequestMapping("getTodayOrderCnt")
     public AjaxResult getTodayOrderCnt() {
         List<Combo> combos = comboService.list(new QueryWrapper<Combo>().eq("status", "1"));
@@ -64,6 +67,6 @@ public class ComboCountController extends BaseController {
             comboCounts.add(comboCount);
         }
         return AjaxResult.success(comboCounts);
-    }
+    }*/
 
 }

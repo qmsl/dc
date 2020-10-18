@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,5 +24,10 @@ public class ComboCountServiceImpl extends ServiceImpl<ComboCountMapper, ComboCo
     @Override
     public List<ComboCount> listComboCount(Date startDate, Date endDate) {
         return baseMapper.listComboCount(startDate, endDate);
+    }
+
+    @Override
+    public List<HashMap> getOrderCnt(Date startDate, Date endDate) {
+        return baseMapper.getOrderCnt(startDate, endDate);
     }
 }

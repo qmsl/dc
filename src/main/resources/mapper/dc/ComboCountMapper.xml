@@ -11,4 +11,20 @@
         </where>
         GROUP BY t.combo_code,t.combo_desc,t.combo_img,t.combo_name,t.combo_type
     </select>
+
+    <select id="getOrderCnt" resultType="java.util.HashMap">
+        select g.id,g.goods_name,IFNULL(count(g.id),0) as cnt,o.cook_name
+        from dc_order o , dc_combo_goods cg, dc_goods g
+        WHERE o.combo_id = cg.combo_id and cg.goods_id = g.id
+        <if test="startDate != null">AND o.order_date >= #{startDate}</if>
+        <if test="endDate != null">AND o.order_date &lt;= #{endDate}</if>
+          AND o.del_flag = 0
+          AND o.status = 0
+          AND cg.del_flag = 0
+          AND g.del_flag = 0
+        GROUP BY g.id,o.cook_name
+        ORDER BY cnt desc
+    </select>
+
+
 </mapper>

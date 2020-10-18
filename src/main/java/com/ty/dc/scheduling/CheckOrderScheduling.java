@@ -85,7 +85,7 @@ public class CheckOrderScheduling {
 
         wxMsgSend(orders, "您的订餐订单因数量不足5份被取消！");
 
-        initComboCount();//把当天的订单统计数据归档，方便查询
+        /*initComboCount();*///把当天的订单统计数据归档，方便查询
     }
 
     @Async

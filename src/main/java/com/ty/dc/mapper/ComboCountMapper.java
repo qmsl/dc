@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ty.dc.entity.ComboCount;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -17,4 +18,6 @@ import java.util.List;
 public interface ComboCountMapper extends BaseMapper<ComboCount> {
 
     List<ComboCount> listComboCount(Date startDate, Date endDate);
+
+    List<HashMap> getOrderCnt(Date startDate, Date endDate);
 }
