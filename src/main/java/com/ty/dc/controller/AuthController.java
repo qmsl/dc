@@ -40,10 +40,10 @@ public class AuthController extends BaseController {
     @AuthIgnore
     public String pre(final String state) {
 
-        /*Cookie cookie1 = new Cookie("uid", "1");
+        Cookie cookie1 = new Cookie("uid", "1");
         cookie1.setPath("/");
         cookie1.setMaxAge(-1);
-        getResponse().addCookie(cookie1);*/
+        getResponse().addCookie(cookie1);
 
         Cookie cookie = new Cookie("state", state);
         cookie.setPath("/");

@@ -13,16 +13,16 @@
     function onload() {
         var uid = getCookie("uid");
         if (null == uid || undefined == uid) {
-            window.location.href = "/auth/wx/auth"
+            window.location.href = "/order/auth/wx/auth"
         } else {
             var state = getCookie("state");
             if (null != state && undefined != state) {
                 if (state == 1) {
-                    window.location.href = "/#/auth?sid="+uid+"&action=list"
+                    window.location.href = "/order/#/auth?sid="+uid+"&action=list"
                 } else if(state ==2) {
-                    window.location.href = "/#/auth?sid="+uid+"&action=scan"
+                    window.location.href = "/order/#/auth?sid="+uid+"&action=scan"
                 } else if(state==3){
-                    window.location.href = "/admin/index.html"
+                    window.location.href = "/order/admin/index.html"
                 } else {
                     window.location.href = "/404.html"
                 }
