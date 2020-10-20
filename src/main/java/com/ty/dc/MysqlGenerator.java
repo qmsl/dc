@@ -66,7 +66,7 @@ public class MysqlGenerator {
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl("jdbc:mysql://112.116.119.163:3306/dc?useUnicode=true&characterEncoding=utf8");
-        dsc.setDriverName("com.mysql.jdbc.Driver");
+        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("dc");
         dsc.setPassword("dcgl@123!!!");
         mpg.setDataSource(dsc);

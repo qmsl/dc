@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ty.dc.base.BaseController;
 import com.ty.dc.entity.Combo;
 import com.ty.dc.entity.Order;
+import com.ty.dc.entity.User;
 import com.ty.dc.interceptor.AuthenticationInterceptor;
 import com.ty.dc.service.IComboService;
 import com.ty.dc.service.IOrderService;
+import com.ty.dc.service.IUserService;
 import com.ty.dc.utils.AjaxResult;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +39,9 @@ public class OrderController extends BaseController {
 
     @Autowired
     private IComboService comboService;
+
+    @Autowired
+    private IUserService userService;
 
     //获取今日订单，取餐和评价时候使用
     @RequestMapping("getTodayOrder")
@@ -82,10 +88,10 @@ public class OrderController extends BaseController {
     @RequestMapping("mod")
     public AjaxResult mod(Long orderId, Long comboId) {
 
-       /* LocalTime endTime = LocalTime.of(16,0);
-        if(LocalTime.now().isAfter(endTime)){
+        LocalTime endTime = LocalTime.of(16, 0);
+        if (LocalTime.now().isAfter(endTime)) {
             return AjaxResult.error("修改订单失败，截止时间16:00！");
-        }*/
+        }
 
         Order order = orderService.getById(orderId);
         if (null == order) {
@@ -116,10 +122,10 @@ public class OrderController extends BaseController {
     @RequestMapping("add")
     public AjaxResult add(Long comboId) {
 
-        /*LocalTime endTime = LocalTime.of(14,0);
-        if(LocalTime.now().isAfter(endTime)){
+        LocalTime endTime = LocalTime.of(14, 0);
+        if (LocalTime.now().isAfter(endTime)) {
             return AjaxResult.error("下单失败，截止时间14:00！");
-        }*/
+        }
 
         String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
 
@@ -137,8 +143,11 @@ public class OrderController extends BaseController {
             return AjaxResult.error("套餐不存在!");
         }
 
+        User user = userService.getOne(new QueryWrapper<User>().eq("uid", uid));
+
         Order order = new Order();
         order.setUserId(uid);
+        order.setUserName(null == user.getName() ? "" : user.getName());
         order.setStatus("1");
         order.setNum(1);
         order.setComboName(combo.getComboName());

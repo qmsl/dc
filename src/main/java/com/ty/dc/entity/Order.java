@@ -33,6 +33,11 @@ public class Order extends BaseEntity {
     private String userId;
 
     /**
+     * 用户ID
+     */
+    private String userName;
+
+    /**
      * 套餐ID
      */
     private Long comboId;

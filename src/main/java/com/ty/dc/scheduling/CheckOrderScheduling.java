@@ -128,7 +128,7 @@ public class CheckOrderScheduling {
         }
         log.info("订单被取消消息通知！uid=" + uid);
 
-        /*try {
+        try {
 
             WxCpService wxCpService = WxCpConfiguration.getCpService(1000033);
             wxCpService.messageSend(WxCpMessage
@@ -138,6 +138,6 @@ public class CheckOrderScheduling {
                     .build());
         } catch (WxErrorException e) {
             log.warning("发送微信消息失败！" + e.getMessage());
-        }*/
+        }
     }
 }

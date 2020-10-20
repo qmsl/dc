@@ -66,6 +66,8 @@ public class ComboCountController extends BaseController {
         FileUtils.setAttachmentResponseHeader(response, ajaxResult.get("msg").toString());
 
         FileUtils.writeBytes(downloadPath, response.getOutputStream());
+
+        FileUtils.deleteFile(downloadPath);
     }
 
     /*//获取今日订单统计数据，今日统计数据是实时数据
