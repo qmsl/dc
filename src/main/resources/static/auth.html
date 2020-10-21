@@ -12,22 +12,17 @@
 <script type="text/javascript">
     function onload() {
         var uid = getCookie("uid");
-        if (null == uid || undefined == uid) {
-            window.location.href = "/order/auth/wx/auth"
+        var state = getCookie("state");
+        if (null != state && undefined != state) {
+            window.location.href = "/order/#/auth?sid="+uid+"&action=list"
+        } else if(state ==2) {
+            window.location.href = "/order/#/auth?sid="+uid+"&action=scan"
+        } else if(state==3){
+            window.location.href = "/order/admin/index.html"
         } else {
-            var state = getCookie("state");
-            if (null != state && undefined != state) {
-                if (state == 1) {
-                    window.location.href = "/order/#/auth?sid="+uid+"&action=list"
-                } else if(state ==2) {
-                    window.location.href = "/order/#/auth?sid="+uid+"&action=scan"
-                } else if(state==3){
-                    window.location.href = "/order/admin/index.html"
-                } else {
-                    window.location.href = "/404.html"
-                }
-            }
+            window.location.href = "/404.html"
         }
+
     }
     //获取cookie
     function getCookie(name) {
@@ -37,6 +32,13 @@
         } else {
             return null;
         }
+    }
+
+    //根据传递过来的参数name获取对应的值
+    function getParameter(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+        var r = location.search.substr(1).match(reg);
+        if (r!=null) return (r[2]); return null;
     }
 </script>
 </html>

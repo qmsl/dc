@@ -1,0 +1,52 @@
+dc:
+  profile:  /data/order
+  redirecturl: https://szzhcg.com
+server:
+  port: 8081
+  servlet:
+    context-path: /order
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 30
+    min-spare-threads: 10
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.253.181.111:3306/dc?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    username: dc
+    password: qweTGB@123
+    druid:
+      initialSize: 2
+      minIdle: 2
+      maxActive: 10
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      maxEvictableIdleTimeMillis: 900000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      webStatFilter:
+        enabled: false
+      statViewServlet:
+        enabled: false
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+wechat:
+  cp:
+    corpId: wwf0325d82e6544daf
+    baseApiUrl: https://smartum.sz.gov.cn/tuyuanwx/cgwework
+    appConfigs:
+      - agentId: 1000033
+        secret: qqiiw0LZ3U_N76fgAkHpI7Wt9PACYH80hJHrxWfG90M
+        token: 111
+        aesKey: 111
