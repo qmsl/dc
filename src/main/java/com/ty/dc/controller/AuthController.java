@@ -4,6 +4,7 @@ import com.ty.dc.base.BaseController;
 import com.ty.dc.interceptor.AuthIgnore;
 import com.ty.dc.service.IUserService;
 import com.ty.dc.utils.Global;
+import com.ty.dc.utils.StringUtils;
 import com.ty.dc.weixin.WxCpConfiguration;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -35,35 +36,22 @@ public class AuthController extends BaseController {
 
     @RequestMapping("index")
     @AuthIgnore
-    public String pre(final String state) {
+    public String pre(final String state, String uid) {
 
-        Cookie cookie1 = new Cookie("uid", "1");
+        if (StringUtils.isEmpty(uid)) {
+            uid = "tianhao";
+        }
+
+        Cookie cookie1 = new Cookie("uid", uid);
         cookie1.setPath("/");
-        cookie1.setMaxAge(10);
+        cookie1.setMaxAge(-1);
         getResponse().addCookie(cookie1);
 
         Cookie cookie = new Cookie("state", state);
         cookie.setPath("/");
-        cookie.setMaxAge(10);
+        cookie.setMaxAge(-1);
         getResponse().addCookie(cookie);
         return "auth";
-
-        //return "auth?uid=111&state="+state+"&_t="+System.currentTimeMillis();
-
-        /*switch (state) {
-            case "1":
-                return "/#/auth?sid=111&action=list";
-            case "2":
-                return "/#/auth?sid=111&action=scan";
-            case "3":
-                Cookie uid = new Cookie("uid", "111");
-                uid.setPath("/");
-                uid.setMaxAge(-1);
-                getResponse().addCookie(uid);
-                return "/order/admin/index.html";
-            default:
-                return "/404.html";
-        }*/
     }
 
 

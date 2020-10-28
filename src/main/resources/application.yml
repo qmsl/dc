@@ -14,8 +14,8 @@ spring:
       max-request-size:  100MB
 mybatis-plus:
   typeAliasesPackage: com.ty.dc.entity
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #configuration:
+  #  log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
     db-config:

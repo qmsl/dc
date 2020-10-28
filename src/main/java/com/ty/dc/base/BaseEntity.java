@@ -1,8 +1,6 @@
 package com.ty.dc.base;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -29,6 +27,7 @@ public class BaseEntity implements Serializable {
      */
     @JsonIgnore
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime crtTime;
 
     /**
@@ -36,6 +35,7 @@ public class BaseEntity implements Serializable {
      */
     @JsonIgnore
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime upTime;
 
     public Long getId() {

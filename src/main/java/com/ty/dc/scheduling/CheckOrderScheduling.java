@@ -37,13 +37,6 @@ public class CheckOrderScheduling {
     @Autowired
     private IOrderService orderService;
 
-    @Autowired
-    private IComboCountService comboCountService;
-
-    @Autowired
-    private IComboService comboService;
-
-
     private HashSet<String> users = new HashSet<>();
 
     //点餐截止时间为14点整，订单截止修改时间16点
@@ -85,29 +78,6 @@ public class CheckOrderScheduling {
 
         wxMsgSend(orders, "您的订餐订单因数量不足5份被取消！");
 
-        /*initComboCount();*///把当天的订单统计数据归档，方便查询
-    }
-
-    @Async
-    void initComboCount() {
-        List<Combo> combos = comboService.list(new QueryWrapper<Combo>().eq("status", "1"));
-        List<HashMap> retval = comboService.getComboCount();
-        List<ComboCount> comboCounts = new ArrayList<>(combos.size());
-        ComboCount comboCount;
-        for (Combo combo : combos) {
-            comboCount = new ComboCount();
-            BeanUtils.copyProperties(combo, comboCount);
-            comboCount.setOrderDate(LocalDate.now());
-            comboCount.setCount(0);//先设置为0，如果有数据下面就设置成实际数量
-            for (HashMap map : retval) {
-                if (map.get("id").toString().equals(combo.getId().toString())) {
-                    comboCount.setCount((Integer) map.get("cnt"));
-                }
-            }
-            comboCounts.add(comboCount);
-        }
-
-        comboCountService.saveBatch(comboCounts);
     }
 
     void wxMsgSend(List<Order> orders, String msg) {
