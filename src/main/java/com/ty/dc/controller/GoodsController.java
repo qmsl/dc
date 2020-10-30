@@ -45,6 +45,7 @@ public class GoodsController extends BaseController {
                 .in(StringUtils.isNotEmpty(comboType) && comboType.equals("1"), "goods_type", "1", "2", "3", "4")
                 .eq(StringUtils.isNotEmpty(comboType) && comboType.equals("2"), "goods_type", "5")
                 .in(StringUtils.isNotEmpty(comboType) && comboType.equals("3"), "goods_type", "6", "2", "3", "4")
+                .orderByAsc("goods_type")
         );
         return AjaxResult.success(getDataTable(list));
     }

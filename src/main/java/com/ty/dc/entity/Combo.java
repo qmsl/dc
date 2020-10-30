@@ -1,5 +1,6 @@
 package com.ty.dc.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ty.dc.base.BaseEntity;
@@ -25,7 +26,7 @@ public class Combo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField
+    @TableField(whereStrategy = FieldStrategy.NOT_EMPTY)
     private String comboName;
 
     private String comboCode;
@@ -34,6 +35,7 @@ public class Combo extends BaseEntity {
 
     private String comboImg;
 
+    @TableField(whereStrategy = FieldStrategy.NOT_EMPTY)
     private String comboType;
 
     private String cookName;

@@ -64,7 +64,7 @@
         </select>
         -->
     <select id="getOrderScoreMin" resultType="java.util.HashMap">
-        select g.id,g.goods_name,IFNULL(avg(o.eve_score),0) as avg,o.cook_name
+        select g.id,g.goods_name,IFNULL(avg(o.eve_score),3) as avg,o.cook_name
         from dc_order o , dc_combo_goods cg, dc_goods g
         WHERE o.combo_id = cg.combo_id and cg.goods_id = g.id
           AND o.del_flag = 0
@@ -77,7 +77,7 @@
     </select>
 
     <select id="getOrderScoreMax" resultType="java.util.HashMap">
-        select g.id,g.goods_name,IFNULL(avg(o.eve_score),0) as avg,o.cook_name
+        select g.id,g.goods_name,IFNULL(avg(o.eve_score),3) as avg,o.cook_name
         from dc_order o , dc_combo_goods cg, dc_goods g
         WHERE o.combo_id = cg.combo_id and cg.goods_id = g.id
         AND o.del_flag = 0
