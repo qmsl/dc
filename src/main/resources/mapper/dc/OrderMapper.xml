@@ -21,7 +21,7 @@
              (SELECT o.combo_id,count(*) as cnt,AVG(eve_score) as avg
              FROM dc_order o
              WHERE o.del_flag = 0
-               AND o.status != 2
+               AND o.status != 0
                AND o.eve_score is not null
                <if test="startDate != null">AND o.order_date >= #{startDate}</if>
                <if test="endDate != null">AND o.order_date &lt;= #{endDate}</if>

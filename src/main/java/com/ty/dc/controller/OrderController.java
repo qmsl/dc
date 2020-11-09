@@ -88,10 +88,10 @@ public class OrderController extends BaseController {
     @RequestMapping("mod")
     public AjaxResult mod(Long orderId, Long comboId) {
 
-       /* LocalTime endTime = LocalTime.of(16, 0);
+        LocalTime endTime = LocalTime.of(16, 0);
         if (LocalTime.now().isAfter(endTime)) {
             return AjaxResult.error("修改订单失败，截止时间16:00！");
-        }*/
+        }
 
         Order order = orderService.getById(orderId);
         if (null == order) {
@@ -122,10 +122,10 @@ public class OrderController extends BaseController {
     @RequestMapping("add")
     public AjaxResult add(Long comboId) {
 
-       /* LocalTime endTime = LocalTime.of(14, 0);
+        LocalTime endTime = LocalTime.of(14, 0);
         if (LocalTime.now().isAfter(endTime)) {
             return AjaxResult.error("下单失败，截止时间14:00！");
-        }*/
+        }
 
         String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
 
