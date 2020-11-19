@@ -10,6 +10,7 @@ import com.ty.dc.service.IGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +36,8 @@ public class ComboServiceImpl extends ServiceImpl<ComboMapper, Combo> implements
 
     @Override
     public List<Combo> listCombo(Combo combo) {
-        List<Combo> combos = baseMapper.selectList(new QueryWrapper<>(combo));
-        if(null == combos){return null;}
+        List<Combo> combos = this.list(new QueryWrapper<>(combo));
+        if(null == combos || combos.size() < 1){return new ArrayList<>();}
         for(Combo combo1 : combos){
             combo1.setGoods(goodsService.getByComboId(combo1.getId()));
         }
