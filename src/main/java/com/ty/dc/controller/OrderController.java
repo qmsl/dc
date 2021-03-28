@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ public class OrderController extends BaseController {
             return AjaxResult.error("订单不正确！");
         }
 
-        if (null == order || order.getOrderDate().isBefore(LocalDate.now())) {
+        if (null == order || order.getOrderDate().isAfter(LocalDate.now().plusDays(1))) {
             return AjaxResult.error("未使用订单暂不允许评价！");
         }
 
@@ -98,9 +99,9 @@ public class OrderController extends BaseController {
             return AjaxResult.error("订单不正确！");
         }
 
-
-        LocalTime endTime = LocalTime.of(16, 0);
-        if (order.getOrderDate().isBefore(LocalDate.now().plusDays(1)) && LocalTime.now().isAfter(endTime)) {
+        LocalDateTime endTime = LocalDateTime.of(LocalDate.now(),LocalTime.of(16, 0));
+        LocalDateTime orderDate = LocalDateTime.of(order.getOrderDate(), LocalTime.now());
+        if (orderDate.isBefore(endTime)) {
             return AjaxResult.error("修改订单失败，截止时间16:00！");
         }
 
@@ -128,21 +129,21 @@ public class OrderController extends BaseController {
     @RequestMapping("add")
     public AjaxResult add(Long comboId,String date) {
 
-        LocalDate orderDate = LocalDate.now();
+        LocalDateTime orderDate = LocalDateTime.now();
         if(null != date){
-            orderDate = LocalDate.parse(date);
+            orderDate = LocalDateTime.of(LocalDate.parse(date), LocalTime.MIN);
         }
 
         //如果是第二天的订单，必须在前一天下午3点之前下单
-        LocalTime endTime = LocalTime.of(15, 0);
-        if (orderDate.isBefore(LocalDate.now().plusDays(1)) && LocalTime.now().isAfter(endTime)) {
+        LocalDateTime endTime = LocalDateTime.of(LocalDate.now(),LocalTime.of(15, 0));
+        if (orderDate.isBefore(endTime)) {
             return AjaxResult.error("下单失败，截止时间15:00！");
         }
 
         String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
 
         int orderCount = orderService.count(new QueryWrapper<Order>()
-                .eq("order_date", orderDate)
+                .eq("order_date", orderDate.toLocalDate())
                 .eq("user_id", uid)
         );
 
@@ -169,7 +170,7 @@ public class OrderController extends BaseController {
         order.setComboImg(combo.getComboImg());
         order.setCookName(combo.getCookName());
         //order.setOrderNum(combo.getComboCode() + "-" + DateUtils.dateTimeNow());
-        order.setOrderDate(orderDate);
+        order.setOrderDate(orderDate.toLocalDate());
 
         boolean isOk = orderService.save(order);
         return AjaxResult.status(isOk);

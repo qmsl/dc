@@ -33,7 +33,7 @@ public class CheckOrderScheduling {
     private HashSet<String> users = new HashSet<>();
 
     //点餐截止时间为14点整，订单截止修改时间16点
-    @Scheduled(cron = "0/10 * 14-15 * * ?")
+    @Scheduled(cron = "0/10 * 15 * * ?")
     void preCheckOrder() {
 
         //首先把所有订单改状态为1(新下单)改成0(已确认)状态,此时不可以新建订单了
@@ -54,7 +54,7 @@ public class CheckOrderScheduling {
         users.addAll(orders.stream().map(Order::getUserId).collect(Collectors.toList()));//把已经发送通知的用户缓存起来，避免重复发送通知
     }
 
-    //定时器有间隔，最后几分钟的修改就更新不到，所以最后在确定下
+    //定时器有间隔，最后几秒钟的修改就更新不到，所以最后在确定下
     @Scheduled(cron = "0 0 16 * * ?")
     void finalCheckOrder() {
         preCheckOrder();//最后执行一次，这次还没有达到额定份数的订单就给取消掉
