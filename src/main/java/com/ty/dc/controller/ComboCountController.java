@@ -70,26 +70,4 @@ public class ComboCountController extends BaseController {
         FileUtils.deleteFile(downloadPath);
     }
 
-    /*//获取今日订单统计数据，今日统计数据是实时数据
-    @RequestMapping("getTodayOrderCnt")
-    public AjaxResult getTodayOrderCnt() {
-        List<Combo> combos = comboService.list(new QueryWrapper<Combo>().eq("status", "1"));
-        List<HashMap> retval = comboService.getComboCount();
-        List<ComboCount> comboCounts = new ArrayList<>(combos.size());
-        ComboCount comboCount;
-        for (Combo combo : combos) {
-            comboCount = new ComboCount();
-            BeanUtils.copyProperties(combo, comboCount);
-            comboCount.setOrderDate(LocalDate.now());
-            comboCount.setCount(0);//先设置为0，如果有数据下面就设置成实际数量
-            for (HashMap map : retval) {
-                if (map.get("id").toString().equals(combo.getId().toString())) {
-                    comboCount.setCount(Integer.valueOf(map.get("cnt").toString()));
-                }
-            }
-            comboCounts.add(comboCount);
-        }
-        return AjaxResult.success(comboCounts);
-    }*/
-
 }

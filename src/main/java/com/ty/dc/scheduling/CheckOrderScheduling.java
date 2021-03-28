@@ -1,12 +1,9 @@
 package com.ty.dc.scheduling;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.ty.dc.entity.Combo;
-import com.ty.dc.entity.ComboCount;
 import com.ty.dc.entity.Order;
-import com.ty.dc.service.IComboCountService;
-import com.ty.dc.service.IComboService;
 import com.ty.dc.service.IOrderService;
 import com.ty.dc.utils.StringUtils;
 import com.ty.dc.weixin.WxCpConfiguration;
@@ -14,15 +11,11 @@ import lombok.extern.java.Log;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.cp.api.WxCpService;
 import me.chanjar.weixin.cp.bean.WxCpMessage;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -93,7 +86,7 @@ public class CheckOrderScheduling {
             uid += order.getUserId() + "|";
         }
 
-        if(StringUtils.isEmpty(uid)){
+        if (StringUtils.isEmpty(uid)) {
             return;
         }
         log.info("订单被取消消息通知！uid=" + uid);
@@ -110,4 +103,27 @@ public class CheckOrderScheduling {
             log.warning("发送微信消息失败！" + e.getMessage());
         }
     }
+
+    @Scheduled(cron = "0 1 16 * * ?")
+    void sendSuccessMsg() {
+        List<Order> orders = orderService.list(new LambdaQueryWrapper<Order>()
+                .eq(Order::getStatus, "0")
+                .eq(Order::getOrderDate, LocalDate.now())
+        );
+
+        for (Order order : orders) {
+            try {
+                String msg = "您的【"+order.getComboName()+"】下单成功！请凭订单号取餐，订单号："+order.getOrderNum();
+                WxCpService wxCpService = WxCpConfiguration.getCpService(1000033);
+                wxCpService.messageSend(WxCpMessage
+                        .TEXT()
+                        .toUser(order.getUserId())
+                        .content(msg)
+                        .build());
+            } catch (WxErrorException e) {
+                log.warning("发送微信消息失败！" + e.getMessage());
+            }
+        }
+    }
+
 }

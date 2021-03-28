@@ -62,6 +62,11 @@ public class OrderController extends BaseController {
         if (null == order || !order.getUserId().equals(uid)) {
             return AjaxResult.error("订单不正确！");
         }
+
+        if (null == order || order.getOrderDate().isBefore(LocalDate.now())) {
+            return AjaxResult.error("未使用订单暂不允许评价！");
+        }
+
         if (null != order.getEveScore() || null != order.getEveDesc()) {
             return AjaxResult.error("重复评价！");
         }
@@ -79,7 +84,7 @@ public class OrderController extends BaseController {
         startPage();
         List<Order> list = orderService.list(new QueryWrapper<Order>()
                 .eq("user_id", uid)
-                .lt("order_date", LocalDate.now())
+                //.lt("order_date", LocalDate.now())
                 .orderByDesc("order_date"));
         return AjaxResult.success(getDataTable(list));
     }
@@ -88,14 +93,15 @@ public class OrderController extends BaseController {
     @RequestMapping("mod")
     public AjaxResult mod(Long orderId, Long comboId) {
 
-        LocalTime endTime = LocalTime.of(16, 0);
-        if (LocalTime.now().isAfter(endTime)) {
-            return AjaxResult.error("修改订单失败，截止时间16:00！");
-        }
-
         Order order = orderService.getById(orderId);
         if (null == order) {
             return AjaxResult.error("订单不正确！");
+        }
+
+
+        LocalTime endTime = LocalTime.of(16, 0);
+        if (order.getOrderDate().isBefore(LocalDate.now().plusDays(1)) && LocalTime.now().isAfter(endTime)) {
+            return AjaxResult.error("修改订单失败，截止时间16:00！");
         }
 
         if (order.getStatus().equals("0")) {
@@ -120,17 +126,23 @@ public class OrderController extends BaseController {
 
     //增加订单
     @RequestMapping("add")
-    public AjaxResult add(Long comboId) {
+    public AjaxResult add(Long comboId,String date) {
 
-        LocalTime endTime = LocalTime.of(14, 0);
-        if (LocalTime.now().isAfter(endTime)) {
-            return AjaxResult.error("下单失败，截止时间14:00！");
+        LocalDate orderDate = LocalDate.now();
+        if(null != date){
+            orderDate = LocalDate.parse(date);
+        }
+
+        //如果是第二天的订单，必须在前一天下午3点之前下单
+        LocalTime endTime = LocalTime.of(15, 0);
+        if (orderDate.isBefore(LocalDate.now().plusDays(1)) && LocalTime.now().isAfter(endTime)) {
+            return AjaxResult.error("下单失败，截止时间15:00！");
         }
 
         String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
 
         int orderCount = orderService.count(new QueryWrapper<Order>()
-                .eq("order_date", LocalDate.now().plusDays(0L))
+                .eq("order_date", orderDate)
                 .eq("user_id", uid)
         );
 
@@ -157,7 +169,7 @@ public class OrderController extends BaseController {
         order.setComboImg(combo.getComboImg());
         order.setCookName(combo.getCookName());
         //order.setOrderNum(combo.getComboCode() + "-" + DateUtils.dateTimeNow());
-        order.setOrderDate(LocalDate.now());
+        order.setOrderDate(orderDate);
 
         boolean isOk = orderService.save(order);
         return AjaxResult.status(isOk);

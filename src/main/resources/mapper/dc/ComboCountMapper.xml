@@ -13,7 +13,7 @@
     </select>
 
     <select id="getOrderCnt" resultType="GoodsCount">
-        select g.id,g.goods_name,IFNULL(count(g.id),0) as cnt,o.cook_name
+        select g.id,g.goods_name,IFNULL(count(g.id),0) as cnt
         from dc_order o , dc_combo_goods cg, dc_goods g
         WHERE o.combo_id = cg.combo_id and cg.goods_id = g.id
         <if test="startDate != null">AND o.order_date >= #{startDate}</if>
@@ -22,7 +22,7 @@
           AND o.status = 0
           AND cg.del_flag = 0
           AND g.del_flag = 0
-        GROUP BY g.id,o.cook_name
+        GROUP BY g.id
         ORDER BY cnt desc
     </select>
 
