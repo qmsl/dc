@@ -80,13 +80,15 @@ public class OrderController extends BaseController {
 
     //获取我的订单列表
     @RequestMapping("list")
-    public AjaxResult list() {
+    public AjaxResult list(String state) {
         String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
         startPage();
         List<Order> list = orderService.list(new QueryWrapper<Order>()
                 .eq("user_id", uid)
-                //.lt("order_date", LocalDate.now())
-                .orderByDesc("order_date"));
+                .ge(state != null,"order_date", LocalDate.now())
+                .le(state == null,"order_date", LocalDate.now())
+                .orderByAsc(state != null,"order_date")
+                .orderByDesc(state == null,"order_date"));
         return AjaxResult.success(getDataTable(list));
     }
 
@@ -148,7 +150,7 @@ public class OrderController extends BaseController {
         );
 
         if (orderCount > 0) {
-            return AjaxResult.error("下单失败，每天只允许下单一次！");
+            return AjaxResult.error("下单失败，当天已经下单！");
         }
 
         Combo combo = comboService.getById(comboId);
