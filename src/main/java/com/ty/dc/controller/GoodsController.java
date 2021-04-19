@@ -42,9 +42,10 @@ public class GoodsController extends BaseController {
         startPage();
         List<Goods> list = goodsService.list(new QueryWrapper<Goods>()
                 .like(StringUtils.isNotEmpty(goodsName), "goods_name", goodsName)
-                .in(StringUtils.isNotEmpty(comboType) && comboType.equals("1"), "goods_type", "1", "2", "3", "4")
-                .eq(StringUtils.isNotEmpty(comboType) && comboType.equals("2"), "goods_type", "5")
-                .in(StringUtils.isNotEmpty(comboType) && comboType.equals("3"), "goods_type", "6", "2", "3", "4")
+                .in(StringUtils.isNotEmpty(comboType) && comboType.equals("1"), "goods_type", "1", "2", "3", "4")//营养简餐
+                .eq(StringUtils.isNotEmpty(comboType) && comboType.equals("2"), "goods_type", "5")//精美面食
+                .in(StringUtils.isNotEmpty(comboType) && comboType.equals("3"), "goods_type", "6", "2", "3", "4")//特色美食
+                .in(StringUtils.isNotEmpty(comboType) && comboType.equals("4"), "goods_type", "1", "2", "3", "4")//运动简餐
                 .eq(StringUtils.isNotEmpty(goodsType), "goods_type", goodsType)
                 .orderByAsc("goods_type")
         );

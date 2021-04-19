@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.ty.dc.entity.Order;
 import com.ty.dc.service.IOrderService;
+import com.ty.dc.utils.DateUtils;
 import com.ty.dc.utils.StringUtils;
 import com.ty.dc.weixin.WxCpConfiguration;
 import lombok.extern.java.Log;
@@ -16,6 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +34,7 @@ public class CheckOrderScheduling {
 
     private HashSet<String> users = new HashSet<>();
 
-    //点餐截止时间为14点整，订单截止修改时间16点
+    //点餐截止时间为15点整，订单截止修改时间16点
     @Scheduled(cron = "0/10 * 15 * * ?")
     void preCheckOrder() {
 
@@ -40,7 +42,8 @@ public class CheckOrderScheduling {
         orderService.update(new UpdateWrapper<Order>()
                 .set("status", "0")
                 .setSql("order_num = CONCAT(combo_code,\"-\",100000+id)")
-                .eq("order_date", LocalDate.now()).eq("status", "1")
+                .eq("order_date", LocalDate.now().plusDays(1))
+                .eq("status", "1")
         );
 
         //然后把所有订餐数量不超过 5 的订单找出来，把状态改回1（可以修改状态）
@@ -50,7 +53,9 @@ public class CheckOrderScheduling {
             orderService.updateById(order);
         }
 
-        wxMsgSend(orders, "您的订餐订单因套餐总订餐数量不足5份被取消，请您及时更改订单套餐！");
+        LocalDate curDate = LocalDate.now().plusDays(1);
+        String dateStr = curDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        wxMsgSend(orders, "您的订餐订单("+ dateStr +")因套餐总订餐数量不足5份可能被取消，请您及时更改订单套餐！");
         users.addAll(orders.stream().map(Order::getUserId).collect(Collectors.toList()));//把已经发送通知的用户缓存起来，避免重复发送通知
     }
 
@@ -59,7 +64,7 @@ public class CheckOrderScheduling {
     void finalCheckOrder() {
         preCheckOrder();//最后执行一次，这次还没有达到额定份数的订单就给取消掉
         List<Order> orders = orderService.list(new QueryWrapper<Order>()
-                .eq("order_date", LocalDate.now()).eq("status", "1")
+                .eq("order_date", LocalDate.now().plusDays(1)).eq("status", "1")
         );
 
         for (Order order : orders) {
@@ -68,8 +73,9 @@ public class CheckOrderScheduling {
         }
 
         users.clear();//最后一次处理完成后清理缓存的已经发送通知的用户,先清理掉缓存，避免最后一次取消订单消息没有发送出去
-
-        wxMsgSend(orders, "您的订餐订单因数量不足5份被取消！");
+        LocalDate curDate = LocalDate.now().plusDays(1);
+        String dateStr = curDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        wxMsgSend(orders, "您的订餐订单("+ dateStr +")因数量不足5份被取消！");
 
     }
 
@@ -104,11 +110,11 @@ public class CheckOrderScheduling {
         }
     }
 
-    @Scheduled(cron = "0 1 16 * * ?")
+    @Scheduled(cron = "30 0 16 * * ?")
     void sendSuccessMsg() {
         List<Order> orders = orderService.list(new LambdaQueryWrapper<Order>()
                 .eq(Order::getStatus, "0")
-                .eq(Order::getOrderDate, LocalDate.now())
+                .eq(Order::getOrderDate, LocalDate.now().plusDays(1))
         );
 
         for (Order order : orders) {

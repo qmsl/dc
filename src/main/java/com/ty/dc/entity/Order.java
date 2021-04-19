@@ -3,6 +3,8 @@ package com.ty.dc.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ty.dc.base.BaseEntity;
 import java.time.LocalDate;
+
+import com.ty.dc.utils.annotation.Excel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,6 +27,7 @@ public class Order extends BaseEntity {
     /**
      * 订单号
      */
+    @Excel(name = "订单号")
     private String orderNum;
 
     /**
@@ -35,6 +38,7 @@ public class Order extends BaseEntity {
     /**
      * 用户ID
      */
+    @Excel(name = "用户名")
     private String userName;
 
     /**
@@ -50,11 +54,13 @@ public class Order extends BaseEntity {
     /**
      * 套餐名称
      */
+    @Excel(name = "套餐名称")
     private String comboName;
 
     /**
      * 套餐编码
      */
+    @Excel(name = "套餐编码")
     private String comboCode;
 
     /**
@@ -65,11 +71,13 @@ public class Order extends BaseEntity {
     /**
      * 数量
      */
+    @Excel(name = "下单数量")
     private Integer num;
 
     /**
      * 订单日期
      */
+    @Excel(name = "订单日期")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate orderDate;
 

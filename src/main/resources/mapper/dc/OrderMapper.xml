@@ -4,11 +4,11 @@
 
     <select id="getOrderMinX" resultType="com.ty.dc.entity.Order">
         SELECT * FROM dc_order
-        WHERE del_flag = 0 AND order_date = CURDATE()
+        WHERE del_flag = 0 AND order_date = DATE_ADD(CURDATE(),INTERVAL 1 DAY)
         AND combo_id IN (
             SELECT combo_id FROM dc_order o
             WHERE o.del_flag = 0
-            AND o.order_date = CURDATE()
+            AND o.order_date = DATE_ADD(CURDATE(),INTERVAL 1 DAY)
             AND o.status != 2
             GROUP BY combo_id
             HAVING COUNT(id) &lt; #{minOrder}

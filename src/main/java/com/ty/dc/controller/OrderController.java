@@ -1,5 +1,6 @@
 package com.ty.dc.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ty.dc.base.BaseController;
 import com.ty.dc.entity.Combo;
@@ -10,11 +11,17 @@ import com.ty.dc.service.IComboService;
 import com.ty.dc.service.IOrderService;
 import com.ty.dc.service.IUserService;
 import com.ty.dc.utils.AjaxResult;
+import com.ty.dc.utils.ExcelUtil;
+import com.ty.dc.utils.Global;
+import com.ty.dc.utils.file.FileUtils;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -78,19 +85,32 @@ public class OrderController extends BaseController {
         return AjaxResult.status(isOk);
     }
 
-    //获取我的订单列表
-    @RequestMapping("list")
-    public AjaxResult list(String state) {
+    //获取我的当前订单列表
+    @RequestMapping("listCur")
+    public AjaxResult listCurrent(String... status) {
         String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
         startPage();
-        List<Order> list = orderService.list(new QueryWrapper<Order>()
-                .eq("user_id", uid)
-                .ge(state != null,"order_date", LocalDate.now())
-                .le(state == null,"order_date", LocalDate.now())
-                .orderByAsc(state != null,"order_date")
-                .orderByDesc(state == null,"order_date"));
+        List<Order> list = orderService.list(new LambdaQueryWrapper<Order>()
+                .eq(Order::getUserId, uid)
+                .in(Order::getStatus, status)
+                .ge(Order::getOrderDate, LocalDate.now())
+                .orderByAsc(Order::getOrderDate));
         return AjaxResult.success(getDataTable(list));
     }
+
+    //获取我的历史订单列表
+    @RequestMapping("listHis")
+    public AjaxResult listHistory(String... status) {
+        String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
+        startPage();
+        List<Order> list = orderService.list(new LambdaQueryWrapper<Order>()
+                .eq(Order::getUserId, uid)
+                .in(Order::getStatus, status)
+                .le(Order::getOrderDate, LocalDate.now())
+                .orderByAsc(Order::getOrderDate));
+        return AjaxResult.success(getDataTable(list));
+    }
+
 
     //修改订单
     @RequestMapping("mod")
@@ -101,10 +121,15 @@ public class OrderController extends BaseController {
             return AjaxResult.error("订单不正确！");
         }
 
-        LocalDateTime endTime = LocalDateTime.of(LocalDate.now(),LocalTime.of(16, 0));
+        LocalDateTime endTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(16, 0));
         LocalDateTime orderDate = LocalDateTime.of(order.getOrderDate(), LocalTime.now());
-        if (orderDate.isBefore(endTime)) {
-            return AjaxResult.error("修改订单失败，截止时间16:00！");
+
+        if (orderDate.toLocalDate().isBefore(endTime.toLocalDate().plusDays(1))) {//明天之前的订单直接不允许修改
+            return AjaxResult.error("修改订单失败，截止时间为前一天16:00！");
+        }
+
+        if(orderDate.toLocalDate().isEqual(LocalDate.now().plusDays(1)) && LocalTime.now().isAfter(endTime.toLocalTime())){
+            return AjaxResult.error("修改订单失败，截止时间为前一天16:00！");
         }
 
         if (order.getStatus().equals("0")) {
@@ -129,17 +154,22 @@ public class OrderController extends BaseController {
 
     //增加订单
     @RequestMapping("add")
-    public AjaxResult add(Long comboId,String date) {
+    public AjaxResult add(Long comboId, String date) {
 
         LocalDateTime orderDate = LocalDateTime.now();
-        if(null != date){
-            orderDate = LocalDateTime.of(LocalDate.parse(date), LocalTime.MIN);
+        if (null != date) {
+            orderDate = LocalDateTime.of(LocalDate.parse(date), LocalTime.now());
         }
 
         //如果是第二天的订单，必须在前一天下午3点之前下单
-        LocalDateTime endTime = LocalDateTime.of(LocalDate.now(),LocalTime.of(15, 0));
-        if (orderDate.isBefore(endTime)) {
-            return AjaxResult.error("下单失败，截止时间15:00！");
+        LocalDateTime endTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(15, 0));
+
+        if (orderDate.toLocalDate().isBefore(endTime.toLocalDate().plusDays(1))) {//明天之前的订单直接不允许下单
+            return AjaxResult.error("下单失败，截止时间为前一天15:00之前！");
+        }
+
+        if(orderDate.toLocalDate().isEqual(LocalDate.now().plusDays(1)) && LocalTime.now().isAfter(endTime.toLocalTime())){
+            return AjaxResult.error("下单失败，截止时间为前一天15:00之前！");
         }
 
         String uid = getRequest().getAttribute(AuthenticationInterceptor.USER_KEY).toString();
@@ -241,6 +271,36 @@ public class OrderController extends BaseController {
         order.setStatus("0");
         List<Order> list = orderService.list(new QueryWrapper<>(order));
         return AjaxResult.success(getDataTable(list));
+    }
+
+    //获取订单信息/根据状态查询
+    @RequestMapping("qryOrderByDate")
+    public AjaxResult query(String orderDate, String... orderStatus) {
+        LocalDate date = LocalDate.parse(orderDate);
+        List<Order> list = orderService.list(new QueryWrapper<Order>()
+                .eq("order_date", date)
+                .in("status", orderStatus)
+        );
+        return AjaxResult.success(list);
+    }
+
+    //获取订单统计数据，前端传入时间段进行查询，查询当天的传当天的日期给startDate
+    @RequestMapping("exportOrderByDate")
+    public void export(String orderDate, HttpServletResponse response, String... orderStatus) throws IOException {
+        LocalDate date = LocalDate.parse(orderDate);
+        List<Order> list = orderService.list(new QueryWrapper<Order>()
+                .eq("order_date", date)
+                .in("status", orderStatus)
+        );
+
+        ExcelUtil<Order> util = new ExcelUtil<>(Order.class);
+
+        AjaxResult ajaxResult = util.exportExcel(list, "当日订单统计");
+        String downloadPath = Global.getDownloadPath() + ajaxResult.get("msg").toString();
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        FileUtils.setAttachmentResponseHeader(response, ajaxResult.get("msg").toString());
+        FileUtils.writeBytes(downloadPath, response.getOutputStream());
+        FileUtils.deleteFile(downloadPath);
     }
 
 }
