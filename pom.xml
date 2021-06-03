@@ -41,11 +41,11 @@
             <version>${mybatisplus.version}</version>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
             <version>${mybatisplus.version}</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>com.github.pagehelper</groupId>
